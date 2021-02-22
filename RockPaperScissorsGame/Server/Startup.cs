@@ -1,3 +1,4 @@
+using System.Reflection.Emit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ namespace Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IAccountStorage, AccountStorage>();
+            services.AddSingleton(provider => new JsonWorker("accounts.json"));
 
             services.AddControllers();
         }

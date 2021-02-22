@@ -10,6 +10,12 @@ namespace Server.Services
     {
         private readonly ConcurrentBag<Account> _storage  = new ConcurrentBag<Account>();
         private readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+
+        public AccountStorage()
+        {
+            //_storage = 
+        }
+
         public async Task<bool> AddAsync(Account account)
         {
             if (account == null) throw new NullReferenceException();
