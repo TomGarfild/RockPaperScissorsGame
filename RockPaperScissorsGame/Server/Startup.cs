@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Server.Services;
 
 namespace Server
 {
@@ -8,6 +9,9 @@ namespace Server
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IStorage<Account>, Storage<Account>>();
+
+            services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

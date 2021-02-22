@@ -1,7 +1,7 @@
 ﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Server
+namespace Server.Controllers
 {
     [ApiController]
     [Route("api/v1/registration")]
