@@ -9,7 +9,7 @@ namespace Server
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IStorage<Account>, Storage<Account>>();
+            services.AddSingleton<IAccountStorage, AccountStorage>();
 
             services.AddControllers();
         }
