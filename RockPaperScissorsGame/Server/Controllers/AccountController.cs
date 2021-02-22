@@ -29,5 +29,13 @@ namespace Server.Controllers
 
             return Conflict();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] Account account)
+        {
+            var token = await _authService.Login(account.Login, account.Password);
+            if (token == null) return NotFound();
+            return Ok();
+        }
     }
 }

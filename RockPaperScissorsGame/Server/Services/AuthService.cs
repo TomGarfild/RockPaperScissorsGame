@@ -26,9 +26,9 @@ namespace Server
             });
         }
 
-        public string Login(string login, string password)
+        public async Task<string> Login(string login, string password)
         {
-            var account = _accounts.Find(login, password);
+            var account = await _accounts.FindAsync(login, password);
             if (account == null) return null;
 
             var token = Guid.NewGuid().ToString();

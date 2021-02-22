@@ -19,8 +19,9 @@ namespace Server.Services
             return true;
         }
 
-        public Account Find(string login, string password)
+        public async Task<Account> FindAsync(string login, string password)
         {
+            //TODO: read from JSON file
             return _storage.FirstOrDefault(acc => acc.Login == login && acc.Password == password);
         }
     }

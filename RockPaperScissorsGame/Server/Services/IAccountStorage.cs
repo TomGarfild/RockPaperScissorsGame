@@ -6,6 +6,6 @@ namespace Server.Services
     {
         public Task<bool> AddAsync(Account account);
 
-        public Account Find(string login, string password);
+        public Task<Account> FindAsync(string login, string password);
     }
 }
