@@ -36,7 +36,7 @@ namespace Server.Controllers
         {
             var token = await _authService.Login(account.Login, account.Password);
             if (token == null) return NotFound();
-            return Ok();
+            return Ok(token);
         }
     }
 }
