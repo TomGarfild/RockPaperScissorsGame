@@ -19,7 +19,7 @@ namespace Server.Controllers
         }
 
 
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] Account account)
         {
             var success = await _authService.Register(account.Login, account.Password);
@@ -31,7 +31,7 @@ namespace Server.Controllers
             return Conflict();
         }
 
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Account account)
         {
             var token = await _authService.Login(account.Login, account.Password);
