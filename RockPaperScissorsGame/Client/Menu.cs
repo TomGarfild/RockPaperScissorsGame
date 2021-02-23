@@ -45,6 +45,7 @@ namespace Client
                         var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri +
                                           (key == ConsoleKey.R ? "/register" : "/login"));
                         var response = await _httpClient.PostAsync(uri, content);
+                        response.EnsureSuccessStatusCode();
                         break;
                     case ConsoleKey.E:
                         return;
@@ -54,11 +55,22 @@ namespace Client
             } while (true);
         }
 
-        private StringContent GetContent()
+        private static StringContent GetContent()
         {
-            var acc = new Account() { Login = "hello", Password = "1234heiii" };
-            var cont = new StringContent(JsonSerializer.Serialize(acc), Encoding.UTF8, "application/json");
-            return null;
+            Console.Write("\nEnter login: ");
+            var login = Console.ReadLine();
+
+            Console.Write("\nEnter password: ");
+            var password = Console.ReadLine();
+
+            var account = new Account()
+            {
+                Login = login, Password = password
+            };
+            var json = JsonSerializer.Serialize(account);
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            return content;
         }
     }
 }
