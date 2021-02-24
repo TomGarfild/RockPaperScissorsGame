@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Server.Models;
 using Server.Services;
 
 namespace Server
@@ -37,6 +38,9 @@ namespace Server
             return token;
         }
 
-        
+        public async Task<bool> IsAuthorized(string token)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
