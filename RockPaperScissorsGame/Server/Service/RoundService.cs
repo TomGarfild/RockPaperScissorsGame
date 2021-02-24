@@ -33,7 +33,7 @@ namespace Server.Service
             return series.ReturnToken();
         }
 
-        public Round.Result GetResult(string user, string seriesKey,[FromServices] StatisticService statisticService)
+        public Round.Result GetResult(string user, string seriesKey)
         {
             return _seriesService.GetSeries(seriesKey).GetResult(user);
         }

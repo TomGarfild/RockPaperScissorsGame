@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,8 @@ namespace Server
             services.AddSingleton(provider => new JsonWorker<List<Account>>("accounts.json"));
             services.AddDbContext<StatisticContext>(options
                 => options.UseSqlite("Data Source=Statistics.db"));
+            services.AddTransient<Stopwatch>();
+            services.AddTransient<IStatisticService,StatisticService>();
             services.AddMemoryCache();
             services.AddControllers();
             services.AddSwaggerGen(c =>
