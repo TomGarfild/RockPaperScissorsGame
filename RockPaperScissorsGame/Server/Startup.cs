@@ -1,6 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
@@ -8,6 +9,7 @@ using Server.Options;
 using Server.Service;
 using Server.Models;
 using Server.Services;
+using Server.StatisticStorege;
 
 namespace Server
 {
@@ -26,7 +28,8 @@ namespace Server
             services.AddSingleton<IAccountStorage, AccountStorage>();
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton(provider => new JsonWorker<List<Account>>("accounts.json"));
-
+            services.AddDbContext<StatisticContext>(options
+                => options.UseSqlite("Data Source=Statistics.db"));
             services.AddMemoryCache();
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -41,7 +44,6 @@ namespace Server
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "DI Demo App API v1");
-                c.RoutePrefix = string.Empty;
             });
 
             app.UseRouting();
