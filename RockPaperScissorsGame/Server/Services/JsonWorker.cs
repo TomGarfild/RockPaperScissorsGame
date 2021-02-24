@@ -23,7 +23,10 @@ namespace Server
             try
             {
                 await using var stream = new MemoryStream();
-                await JsonSerializer.SerializeAsync(stream, accounts, accounts.GetType());
+                await JsonSerializer.SerializeAsync(stream, accounts, accounts.GetType(), new JsonSerializerOptions()
+                {
+                    WriteIndented = true
+                });
                 stream.Position = 0;
                 using var reader = new  StreamReader(stream);
                 var json = await reader.ReadToEndAsync();
@@ -48,7 +51,10 @@ namespace Server
             {
                 await using var stream = File.OpenRead(_path);
 
-                return await JsonSerializer.DeserializeAsync<T>(stream);
+                return await JsonSerializer.DeserializeAsync<T>(stream, new JsonSerializerOptions()
+                {
+                    WriteIndented = true
+                });
             }
             catch (Exception e)
             {
