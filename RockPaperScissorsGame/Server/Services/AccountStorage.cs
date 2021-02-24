@@ -10,7 +10,7 @@ namespace Server.Services
     public class AccountStorage : IAccountStorage
     {
         private List<Account> _storage  = new List<Account>();
-        private readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+        //private readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
         private readonly JsonWorker<List<Account>> _jsonWorker;
 
         public AccountStorage(JsonWorker<List<Account>> jsonWorker)

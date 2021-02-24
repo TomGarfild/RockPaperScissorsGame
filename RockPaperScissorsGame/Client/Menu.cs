@@ -9,13 +9,6 @@ namespace Client
 {
     public class Menu
     {
-        /*string reg = "http://localhost:5000/api/v1/account/login";
-            var httpClient = new HttpClient() {BaseAddress = new Uri("http://localhost:5000")};
-            var acc = new Account() {Login = "hello", Password = "1234heiii"};
-            var cont = new StringContent(JsonSerializer.Serialize(acc), Encoding.UTF8, "application/json");
-            var response  = await httpClient.PostAsync(new Uri(reg), cont);
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
-            Console.ReadKey();*/
         private readonly HttpClient _httpClient;
 
         public Menu(HttpClient httpClient)
@@ -25,16 +18,18 @@ namespace Client
 
         public async Task Start()
         {
-            Console.WriteLine("\n\t\t-+-------------------------------+-");
-            Console.WriteLine("\t\t | Menu Rock Paper Scissors Game |");
-            Console.WriteLine("\t\t-+-------------------------------+-");
-            Console.WriteLine("\t\t |       Register - press R      |");
-            Console.WriteLine("\t\t |       Login    - press L      |");
-            Console.WriteLine("\t\t |       Exit     - press E      |");
-            Console.WriteLine("\t\t-+-------------------------------+-");
-            Console.Write("\n\t\t  Key: ");
+            Console.Clear();
+            Console.WriteLine("\n\t-+-------------------------------+-");
+            Console.WriteLine("\t | Menu Rock Paper Scissors Game |");
+            Console.WriteLine("\t-+-------------------------------+-");
+            Console.WriteLine("\t |       Register - press R      |");
+            Console.WriteLine("\t |       Login    - press L      |");
+            Console.WriteLine("\t |       Exit     - press E      |");
+            Console.WriteLine("\t-+-------------------------------+-");
+            
             do
             {
+                Console.Write("\r\t  Key: ");
                 var key = Console.ReadKey().Key;
 
                 switch (key)
@@ -45,7 +40,21 @@ namespace Client
                         var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri +
                                           (key == ConsoleKey.R ? "/register" : "/login"));
                         var response = await _httpClient.PostAsync(uri, content);
-                        response.EnsureSuccessStatusCode();
+                        switch ((int)response.StatusCode)
+                        {
+                            case 200:
+                                Console.WriteLine("\t  OK");
+                                break;
+                            case 409:
+                                Console.WriteLine("\t  Login exists already");
+                                break;
+                            case 404:
+                                Console.WriteLine("\t  Such user wasn't found");
+                                break;
+                            default:
+                                Console.WriteLine("\t  Something went wrong");
+                                break;
+                        }
                         break;
                     case ConsoleKey.E:
                         return;
@@ -57,12 +66,10 @@ namespace Client
 
         private static StringContent GetContent()
         {
-            Console.Write("\nEnter login: ");
-            var login = Console.ReadLine();
-
-            Console.Write("\nEnter password: ");
-            var password = Console.ReadLine();
-
+            Console.WriteLine();
+            var login = GetField("login", 3, 20);
+            var password = GetField("password", 6, 64);
+            
             var account = new Account()
             {
                 Login = login, Password = password
@@ -71,6 +78,21 @@ namespace Client
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             return content;
+        }
+
+        private static string GetField(string name, int min, int max)
+        {
+            Console.Write($"\t  Enter {name}: ");
+            var field = Console.ReadLine()?.Trim();
+            while (field != null && (field.Length < min || field.Length > max))
+            {
+                Console.SetCursorPosition(0, Console.CursorTop - 1);
+                Console.Write("\r" + new string(' ', Console.WindowWidth));
+                Console.SetCursorPosition(0, Console.CursorTop - 1);
+                Console.Write($"\t  Enter {name}(min length = {min}, max length = {max}): ");
+                field = Console.ReadLine()?.Trim();
+            }
+            return field;
         }
     }
 }
