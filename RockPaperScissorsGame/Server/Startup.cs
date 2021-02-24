@@ -1,21 +1,11 @@
 using System.Collections.Generic;
-using System.Reflection.Emit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
-using Server.Model;
 using Server.Options;
 using Server.Service;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using Server.Models;
 using Server.Services;
 
@@ -23,13 +13,11 @@ namespace Server
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-      
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
+        public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<TimeOptions>(Configuration.GetSection("Time"));
