@@ -35,9 +35,16 @@ namespace Server.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Account account)
         {
-            var token = await _authService.Login(account.Login, account.Password);
-            if (token == null) return NotFound();
-            return Ok(token);
+            try
+            {
+                var token = await _authService.Login(account.Login, account.Password);
+                if (token == null) return NotFound();
+                return Ok(token);
+            }
+            catch (MultiDeviceException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete("logout/{token}")]

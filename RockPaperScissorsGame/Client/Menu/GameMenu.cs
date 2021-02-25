@@ -9,10 +9,12 @@ namespace Client.Menu
     {
         private readonly HttpClient _httpClient;
         private readonly string _token;
+        private readonly MediaTypeWithQualityHeaderValue _mediaType;
         public GameMenu(HttpClient httpClient, string token)
         {
             _httpClient = httpClient;
             _token = token;
+            _mediaType = new MediaTypeWithQualityHeaderValue("application/json");
         }
         public override async Task Start()
         {
@@ -24,10 +26,10 @@ namespace Client.Menu
             {
                 _httpClient.DefaultRequestHeaders.Add("x-token", _token);
             }
-            var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
-            _httpClient.DefaultRequestHeaders.Accept.Remove(mediaType);
-            _httpClient.DefaultRequestHeaders.Accept.Add(mediaType);
-
+            if (!_httpClient.DefaultRequestHeaders.Accept.Contains(_mediaType))
+            {
+                _httpClient.DefaultRequestHeaders.Accept.Add(_mediaType);
+            }
             do
             {
                 if (changed)
