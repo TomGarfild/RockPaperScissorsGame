@@ -10,7 +10,7 @@ using Server.Model;
 using Server.Options;
 using Server.Service;
 
-namespace Tests
+namespace NUnitTest
 {
     public class SeriesServiceTest
     {
@@ -28,12 +28,12 @@ namespace Tests
         {
             var mockcach = GetMemoryCache();
             var mockOptions = new Mock<IOptions<TimeOptions>>();
-            mockOptions.Setup(m => m.Value).Returns(new TimeOptions() {SeriesTimeOut = TimeSpan.FromMinutes(5)});
+            mockOptions.Setup(m => m.Value).Returns(new TimeOptions() { SeriesTimeOut = TimeSpan.FromMinutes(5) });
             var seriesService = new SeriesService(mockcach, mockOptions.Object);
 
             var series = seriesService.AddToPublicSeries("aaa");
 
-            Assert.Equal("aaa",series.Users[0]);
+            Assert.Equal("aaa", series.Users[0]);
             Assert.False(series.IsFull);
             Assert.False(series.IsDeleted);
         }
@@ -79,7 +79,7 @@ namespace Tests
             var series = seriesService.AddToPrivateSeries("aaa");
             series = seriesService.SearchAndAddToPrivateSeries("aaa", series.Code);
 
-            Assert.Contains("aaa",series.Users);
+            Assert.Contains("aaa", series.Users);
             Assert.False(series.IsFull);
             Assert.False(series.IsDeleted);
         }
@@ -108,7 +108,7 @@ namespace Tests
             var seriesService = new SeriesService(mockcach, mockOptions.Object);
 
             var series = seriesService.AddToTrainingSeries("aaa");
-           
+
             Assert.Contains("aaa", series.Users);
             Assert.True(series.Users.Count == 1);
             Assert.False(series.IsDeleted);
@@ -145,7 +145,7 @@ namespace Tests
 
             var series = seriesService.AddToPublicSeries("aaa");
 
-            Assert.Equal(series,seriesService.GetSeries(series.Id));
+            Assert.Equal(series, seriesService.GetSeries(series.Id));
         }
     }
 }
