@@ -10,8 +10,7 @@ namespace Server.Services
     public class AccountStorage : IAccountStorage
     {
         private List<Account> _storage  = new List<Account>();
-
-        //private readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
         private readonly JsonWorker<List<Account>> _jsonWorker;
 
         public AccountStorage(JsonWorker<List<Account>> jsonWorker)
@@ -22,14 +21,23 @@ namespace Server.Services
         public async Task<bool> AddAsync(Account account)
         {
             if (account == null) throw new NullReferenceException();
-            if (_storage.Count == 0)
+            await _semaphore.WaitAsync();
+            try
             {
-                _storage = await _jsonWorker.ReadAllAsync();
-            }
-            if (_storage.Any(acc => acc.Login == account.Login || acc.Id == account.Id)) return false;
+                if (_storage.Count == 0)
+                {
+                    _storage = await _jsonWorker.ReadAllAsync();
+                }
 
-            _storage.Add(account);
-            await _jsonWorker.WriteAllAsync(_storage);
+                if (_storage.Any(acc => acc.Login == account.Login || acc.Id == account.Id)) return false;
+
+                _storage.Add(account);
+                await _jsonWorker.WriteAllAsync(_storage);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
 
             return true;
         }
@@ -41,7 +49,15 @@ namespace Server.Services
                 _storage = await _jsonWorker.ReadAllAsync();
             }
 
-            return _storage.FirstOrDefault(acc => acc.Login == login && acc.Password == password);
+            await _semaphore.WaitAsync();
+            try
+            {
+                return _storage.FirstOrDefault(acc => acc.Login == login && acc.Password == password);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
     }
 }
