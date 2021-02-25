@@ -9,11 +9,16 @@ namespace Server.Model
 {
     public class Series
     {
+        public Series()
+        {
+            IsFull = false;
+            IsDeleted = false;
+            Id = Guid.NewGuid().ToString();
+        }
+
+        protected Round _round = new Round();
         private bool _checkResult = false;
-        public Round.OptionChoice User1Choice { get; set; } = Round.OptionChoice.Undefine;
-        public Round.OptionChoice User2Choice { get; set; } = Round.OptionChoice.Undefine;
-        public CancellationTokenSource Source { get; private set; } = new CancellationTokenSource();
-        public string Id { get; set; }
+        public string Id { get; }
         public List<string> Users { get;  } = new List<string>();
         public bool IsFull{get; set; }
         public bool IsDeleted { get; set; }
@@ -26,39 +31,49 @@ namespace Server.Model
         }
         public void AddUser(string user)
         {
-            if (!IsFull)
+            if (Users.Count == 1)
             {
                 Users.Add(user);
                 IsFull = true;
             }
+            else
+            {
+                Users.Add(user);
+            }
         }
 
-        public Round.Result GetResult(string user)
+        public virtual Round.Result GetResult(string user)
         {
+            var res = _round.GetResult();
             if (Users[0] == user)
             {
-                var res = Result(User1Choice, User2Choice);
                 if (!_checkResult)
                 {
                     _checkResult = true;
                 }
                 else
                 {
-                    Clear();
+                    _round.Clear();
                 }
                 return res;
             }
             else if (Users[1] == user)
             {
-                var res = Result(User2Choice, User1Choice);
                 if (!_checkResult)
                 {
                     _checkResult = true;
                 }
                 else
                 {
-                    Clear();
+                   _round.Clear();
                 }
+
+                res = res switch
+                {
+                    Round.Result.Win => Round.Result.Lose,
+                    Round.Result.Lose => Round.Result.Win,
+                    _ => res
+                };
                 return res;
             }
             if (!_checkResult)
@@ -67,31 +82,23 @@ namespace Server.Model
             }
             else
             {
-                Clear();
+                _round.Clear();
             }
             return Round.Result.Undefine;
         }
 
-        public void Clear()
+        public void SetChoice1(string choice)
         {
-            User1Choice = Round.OptionChoice.Undefine;
-            User2Choice = Round.OptionChoice.Undefine;
-            Source = new CancellationTokenSource();
+            _round.SetChoice1(choice);
         }
-        private Round.Result Result(Round.OptionChoice User1Choice, Round.OptionChoice User2Choice)
+        public void SetChoice2(string choice)
         {
-            if (User1Choice == User2Choice)
-                return Round.Result.Draw;
-            else if (User1Choice == Round.OptionChoice.Scissor && User1Choice == Round.OptionChoice.Rock)
-            {
-                return Round.Result.Win;
-            }
-            else if (User1Choice > User2Choice)
-            {
-                return Round.Result.Win;
-            }
+            _round.SetChoice2(choice);
+        }
 
-            return Round.Result.Lose;
+        public CancellationToken ReturnToken()
+        {
+            return _round.Source.Token;
         }
     }
 }

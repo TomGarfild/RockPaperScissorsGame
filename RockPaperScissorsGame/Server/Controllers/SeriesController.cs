@@ -24,27 +24,68 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        [Route("NewRoom")]
-        public async Task<ActionResult<string>> NewRoom([FromHeader(Name = "x-login")][Required] string user)
+        [Route("NewPublicSeries")]
+        public async Task<ActionResult<Series>> NewPublicSeries([FromHeader(Name = "x-login")][Required] string user)
         {
             // todo check authorization
-            var room = _seriesService.AddToSeries(user); // ToDo add user id who send request
+            var series = _seriesService.AddToPublicSeries(user); // ToDo add user id who send request
 
-            while ((!room.IsDeleted)
-                   && (!room.IsFull))
+            while ((!series.IsDeleted)
+                   && (!series.IsFull))
             {
-                await Task.Delay(TimeSpan.FromSeconds(2));
+                await Task.Delay(TimeSpan.FromSeconds(1));
                 _seriesService.Check();
             }
 
-            if (room.IsDeleted)
+            if (series.IsDeleted)
             {
                 return StatusCode(423);
             }
             else
             {
-                return room.Id;
+                return series;
             }
-        }   
+        }
+
+        [HttpGet]
+        [Route("NewPrivateSeries")]
+        public async Task<ActionResult<PrivateSeries>> NewPrivateSeries([FromHeader(Name = "x-login")][Required] string user)
+        {
+            // todo check authorization
+            var series = _seriesService.AddToPrivateSeries(user); // ToDo add user id who send request
+            return series;
+        }
+        [HttpGet]
+        [Route("SearchPrivateSeries")]
+        public async Task<ActionResult<Series>> SearchPrivateSeries([FromHeader(Name = "x-login")][Required] string user, [FromHeader(Name = "x-code")][Required] string code)
+        {
+            // todo check authorization
+            var series = _seriesService.SearchAndAddToPrivateSeries(user,code); // ToDo add user id who send request
+
+            while ((!series.IsDeleted)
+                   && (!series.IsFull))
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                _seriesService.Check();
+            }
+
+            if (series.IsDeleted)
+            {
+                return StatusCode(423);
+            }
+            else
+            {
+                return series;
+            }
+        }
+        [HttpGet]
+        [Route("NewTrainingSeries")]
+        public async Task<ActionResult<TrainingSeries>> NewTrainingSeries([FromHeader(Name = "x-login")][Required] string user)
+        {
+            // todo check authorization
+            var series = _seriesService.AddToTrainingSeries(user); // ToDo add user id who send request
+            return series;
+           
+        }
     }
 }

@@ -11,5 +11,6 @@ namespace Server.Service
     {
         public CancellationToken? StartRound(string user, string seriesKey, string choice);
         public Round.Result GetResult(string user, string seriesKey);
+        public void StartRoundTraining(string user, string seriesKey, string choice);
     }
 }
