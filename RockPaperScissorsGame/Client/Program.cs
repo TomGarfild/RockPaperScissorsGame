@@ -1,12 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Client;
+using Client.Menu;
 
 namespace Client
 {

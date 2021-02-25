@@ -2,16 +2,14 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Client
+namespace Client.Menu
 {
     public class StatisticMenu : Menu
     {
         private readonly HttpClient _httpClient;
-        private readonly string _token;
-        public StatisticMenu(HttpClient httpClient, string token)
+        public StatisticMenu(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _token = token;
         }
         public override async Task Start()
         {
@@ -30,7 +28,7 @@ namespace Client
                 switch (key)
                 {
                     case ConsoleKey.D1:
-
+                        var response = await _httpClient.GetAsync(_httpClient.BaseAddress.AbsoluteUri + "/statistic/LocalStatistic");
                         break;
                     case ConsoleKey.D2:
 

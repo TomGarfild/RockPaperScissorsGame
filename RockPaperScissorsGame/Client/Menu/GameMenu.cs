@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace Client
+namespace Client.Menu
 {
     public class GameMenu : Menu
     {
@@ -61,7 +61,7 @@ namespace Client
                         await roomMenu.Start();
                         break;
                     case ConsoleKey.D4:
-                        var statistic = new StatisticMenu(_httpClient, _token);
+                        var statistic = new StatisticMenu(_httpClient);
                         await statistic.Start();
                         break;
                     case ConsoleKey.E:
