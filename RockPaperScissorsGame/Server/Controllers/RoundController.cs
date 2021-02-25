@@ -39,7 +39,7 @@ namespace Server.Controllers
             string series,
             [FromHeader(Name = "x-choice")] [Required]
             string choice,
-            [FromServices] StatisticService statisticService,
+            [FromServices] IStatisticService statisticService,
             [FromServices] Stopwatch stopwatch
         )
         {

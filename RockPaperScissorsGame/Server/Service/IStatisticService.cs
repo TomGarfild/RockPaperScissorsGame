@@ -12,7 +12,7 @@ namespace Server.Service
     {
         public void Add(string login, TimeSpan length, DateTimeOffset time, Round.Result result,
             Round.OptionChoice choice);
-        public IEnumerable<StatisticItem> GetStatisticItems(string login);
-        public IEnumerable<StatisticItem> GetGlobalStatistic();
+        public string GetStatisticItems(string login);
+        public Task<string> GetGlobalStatistic();
     }
 }

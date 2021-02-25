@@ -28,7 +28,7 @@ namespace Server.Controllers
             if (_authService.IsAuthorized(token))
             {
                 var user = _authService.GetLogin(token);
-                return StatisticItem.ToStringStatisticLocalPlayer(statisticService.GetStatisticItems(user).ToList());
+                return statisticService.GetStatisticItems(user);
             }
             else
             {
@@ -39,7 +39,7 @@ namespace Server.Controllers
         [Route("GlobalStatistic")]
         public async Task<string> Global([FromServices] IStatisticService statisticService)
         {
-            return StatisticItem.ToStringStatisticGlobal( statisticService.GetGlobalStatistic().ToList());
+            return await statisticService.GetGlobalStatistic();
         }
 
     }

@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Server.Model;
 using Server.StatisticStorege;
 
@@ -24,14 +26,37 @@ namespace Server.Service
             await _statisticContext.SaveChangesAsync();
         }
 
-        public  IEnumerable<StatisticItem> GetStatisticItems(string login)
+        public  string GetStatisticItems(string login)
         {
-            return _statisticContext.StatisticItems.Where(s => s.Login == login);
+
+            var list = _statisticContext.StatisticItems.Where(s => s.Login == login).ToList();
+
+            var str = new StringBuilder($"Login: {list[0].Login}\n");
+            var time = new TimeSpan();
+            list.Select(l => time += l.Length);
+            str.AppendLine($"Total time: {time}");
+            str.AppendLine($"Total Game: {list.Count}");
+            var win = list.Count(l => l.Result == Round.Result.Win);
+            str.AppendLine($"Part Win: {win * 100 / list.Count}%");
+            var winToday = list.Count(l =>
+                ((l.Result == Round.Result.Win) && (l.Time.Day == DateTimeOffset.Now.Day) &&
+                 (l.Time.Month == DateTimeOffset.Now.Month) && (l.Time.Year == DateTimeOffset.Now.Year)));
+            str.AppendLine($"Today Win: {winToday}");
+            return str.ToString();
         }
 
-        public IEnumerable<StatisticItem> GetGlobalStatistic()
+        public async Task<string> GetGlobalStatistic()
         {
-            return _statisticContext.StatisticItems.GroupBy(s => s.Login).Where(s => s.Count() >= 10).SelectMany(s=>s);
+           var list =_statisticContext.StatisticItems.GroupBy(s => s.Login).Where(s => s.Count() >= 10);
+            var str = new StringBuilder("");
+            str.AppendLine($"\tLogin\tWin");
+            var dic = new Dictionary<string, int>();
+            await list.ForEachAsync(l =>
+            {
+                  str.Append($"\t{l.Key}\t");
+                  str.AppendLine(l.Count().ToString());
+            });
+            return str.ToString();
         }
     }
 }
