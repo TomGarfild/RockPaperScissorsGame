@@ -24,10 +24,5 @@ namespace Server.Model
             return _round.GetResult();
         }
 
-        public TrainingSeries GetNewTrainingSeries()
-        {
-            return new TrainingSeries() {IsFull = false, IsDeleted = false, Id = Guid.NewGuid().ToString()};
-
-        }
     }
 }

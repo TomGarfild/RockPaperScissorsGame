@@ -15,7 +15,14 @@ namespace Server.Model
 
         public PrivateSeries():base()
         {
-            Code = Id.Substring(0, 4);
+
+        }
+        public static PrivateSeries GetNewPrivateSeries()
+        {
+            var series = new PrivateSeries() { IsFull = false, IsDeleted = false, Id = Guid.NewGuid().ToString()};
+            series.Code = series.Id.Substring(0, 4);
+            return series;
+
         }
     }
 }
