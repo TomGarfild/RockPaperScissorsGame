@@ -10,7 +10,7 @@ using Server.Model;
 using Server.Options;
 using Server.Service;
 
-namespace NUnitTest
+namespace XUnitTests
 {
     public class SeriesServiceTest
     {

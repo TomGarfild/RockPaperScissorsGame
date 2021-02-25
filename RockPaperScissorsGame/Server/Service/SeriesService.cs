@@ -48,7 +48,7 @@ namespace Server.Service
         {
             lock (Ob)
             {
-                if (_waitSeries != null)
+                if ((_waitSeries != null)&&(!_waitSeries.Users.Contains(user)))
                 {
                     _waitSeries.AddUser(user);
                     var room = _waitSeries;
