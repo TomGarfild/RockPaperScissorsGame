@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Server.Models;
-using Server.Services;
 
-namespace Server
+namespace Server.Services
 {
     public class AuthService : IAuthService
 
@@ -38,9 +37,10 @@ namespace Server
             return token;
         }
 
-        public async Task<bool> IsAuthorized(string token)
+        public bool IsAuthorized(string token)
         {
-            throw new NotImplementedException();
+            if (token == null || !_tokens.ContainsKey(token)) return false;
+            return true;
         }
     }
 }
