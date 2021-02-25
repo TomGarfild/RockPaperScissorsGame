@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
@@ -20,7 +19,8 @@ namespace Server.Controllers
         }
 
 
-        [HttpPost("register")]
+        [HttpPost]
+        [Route("register")]
         public async Task<IActionResult> Register([FromBody] Account account)
         {
             var success = await _authService.Register(account.Login, account.Password);
@@ -32,7 +32,8 @@ namespace Server.Controllers
             return Conflict();
         }
 
-        [HttpPost("login")]
+        [HttpPost]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] Account account)
         {
             var token = await _authService.Login(account.Login, account.Password);
@@ -40,7 +41,8 @@ namespace Server.Controllers
             return Ok(token);
         }
 
-        [HttpDelete("logout/{token}")]
+        [HttpDelete]
+        [Route(("logout/{token}"))]
         public async Task<IActionResult> Logout()
         {
             var token = (string)HttpContext.Request.RouteValues["token"];
