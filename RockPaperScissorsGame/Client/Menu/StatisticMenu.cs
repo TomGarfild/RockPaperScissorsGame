@@ -13,25 +13,29 @@ namespace Client.Menu
         }
         public override async Task Start()
         {
+            PrintMenu("|        Statistics Menu        |",
+                new[]
+                {
+
+                    "|   Local Statistic  - press 1  |",
+                    "|   Global Statistic - press 2  |",
+                    "|   Exit             - press E  |"
+                });
             do
             {
-                PrintMenu("\t |        Statistics Menu        |",
-                    new[]
-                    {
-                        
-                        "\t |   Local Statistic  - press 1  |",
-                        "\t |   Global Statistic - press 2  |",
-                        "\t |   Exit             - press E  |"
-                    });
-                Console.Write("\r\t  Key: ");
+                Console.Write("\rKey: ");
                 var key = Console.ReadKey().Key;
                 switch (key)
                 {
                     case ConsoleKey.D1:
                         var response = await _httpClient.GetAsync(_httpClient.BaseAddress.AbsoluteUri + "/statistic/LocalStatistic");
+                        var stat = await response.Content.ReadAsAsync<string>();
+                        Console.WriteLine("\n"+stat);
                         break;
                     case ConsoleKey.D2:
                         var responseGlobal = await _httpClient.GetAsync(_httpClient.BaseAddress.AbsoluteUri + "/statistic/GlobalStatistic");
+                        var statGlobal = await responseGlobal.Content.ReadAsAsync<string>();
+                        Console.WriteLine("\n"+statGlobal);
                         break;
                     case ConsoleKey.E:
                         return;

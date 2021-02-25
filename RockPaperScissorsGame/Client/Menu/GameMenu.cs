@@ -34,19 +34,19 @@ namespace Client.Menu
             {
                 if (changed)
                 {
-                    PrintMenu("\t | Menu Rock Paper Scissors Game |",
+                    PrintMenu("| Menu Rock Paper Scissors Game |",
                         new[]
                         {
-                            "\t |     Public Room  - press 1    |",
-                            "\t |     Private Room - press 2    |",
-                            "\t |     Computer     - press 3    |",
-                            "\t |     Statistic    - press 4    |",
-                            "\t |     Exit         - press E    |"
+                            "|     Public Room  - press 1    |",
+                            "|     Private Room - press 2    |",
+                            "|     Computer     - press 3    |",
+                            "|     Statistic    - press 4    |",
+                            "|     Exit         - press E    |"
                         });
                 }
 
                 changed = true;
-                Console.Write("\r\t  Key: ");
+                Console.Write("\rKey: ");
                 var key = Console.ReadKey().Key;
                 switch (key)
                 {
