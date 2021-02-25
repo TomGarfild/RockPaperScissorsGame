@@ -23,13 +23,13 @@ namespace Server.Controllers
 
         [HttpGet]
         [Route("LocalStatistic")]
-        public async Task<ActionResult<List<StatisticItem>>> Local([FromHeader(Name = "x-token")][Required] string token,
-        [FromServices] StatisticService statisticService)
+        public async Task<ActionResult<string>> Local([FromHeader(Name = "x-token")][Required] string token,
+        [FromServices] IStatisticService statisticService)
         {
             if (!_authService.IsAuthorized(token))
             {
                 var user = _authService.GetLogin(token);
-                return statisticService.GetStatisticItems(user).ToList();
+                return StatisticItem.ToStringStatisticLocalPlayer(statisticService.GetStatisticItems(user).ToList());
             }
             else
             {
@@ -38,10 +38,9 @@ namespace Server.Controllers
         }
         [HttpGet]
         [Route("GlobalStatistic")]
-        public async Task<List<StatisticItem>> Global([FromHeader(Name = "x-login")][Required] string user,
-            [FromServices] StatisticService statisticService)
+        public async Task<string> Global([FromServices] IStatisticService statisticService)
         {
-            return statisticService.GetGlobalStatistic().ToList();
+            return StatisticItem.ToStringStatisticGlobal( statisticService.GetGlobalStatistic().ToList());
         }
 
     }
