@@ -50,7 +50,8 @@ namespace Client
                         {
                             Console.WriteLine("\t  Your LogIn was successful.");
                             await Task.Delay(1000);
-                            var menu = new GameMenu((await loginResponse.Content.ReadAsStringAsync()));
+                            var token = await loginResponse.Content.ReadAsStringAsync();
+                            var menu = new GameMenu(token.Substring(1, token.Length-2));
                             await menu.Start();
                             return;
                         }
