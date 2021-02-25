@@ -24,7 +24,7 @@ namespace Server.Service
             await _statisticContext.SaveChangesAsync();
         }
 
-        public IEnumerable<StatisticItem> GetStatisticItems(string login)
+        public  IEnumerable<StatisticItem> GetStatisticItems(string login)
         {
             return _statisticContext.StatisticItems.Where(s => s.Login == login);
         }
