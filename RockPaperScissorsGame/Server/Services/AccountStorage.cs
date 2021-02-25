@@ -43,5 +43,10 @@ namespace Server.Services
 
             return _storage.FirstOrDefault(acc => acc.Login == login && acc.Password == password);
         }
+
+        public string FindById(string id)
+        {
+            return _storage.Find(a => a.Id == id).Login;
+        }
     }
 }
