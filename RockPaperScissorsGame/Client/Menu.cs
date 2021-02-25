@@ -6,6 +6,24 @@ namespace Client
 {
     public abstract class Menu
     {
+        protected readonly string Token;
+        protected readonly HttpClient Client;
+
+        protected Menu()
+        {
+
+        }
+
+        protected Menu(string token)
+        {
+            Token = token;
+        }
+
+        protected Menu(HttpClient client)
+        {
+            Client = client;
+        }
+
         public abstract Task Start();
         protected static void PrintMenu(string header, string[] fields)
         {
