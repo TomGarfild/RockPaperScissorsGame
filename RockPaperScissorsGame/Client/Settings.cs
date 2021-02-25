@@ -2,7 +2,7 @@
 
 namespace Client
 {
-    class Settings
+    public class Settings
     {
         [JsonPropertyName("baseAddress")]
         public string BaseAddress { get; set; }

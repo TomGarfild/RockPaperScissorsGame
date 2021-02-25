@@ -31,7 +31,7 @@ namespace Server.Controllers
         public async Task<ActionResult<Series>> NewPublicSeries([FromHeader(Name = "x-token")] [Required]
             string token)
         {
-            if (!_authService.IsAuthorized(token))
+            if (_authService.IsAuthorized(token))
             {
                 var user = _authService.GetLogin(token);
                 var series = _seriesService.AddToPublicSeries(user); // ToDo add user id who send request

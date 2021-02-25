@@ -30,11 +30,17 @@ namespace Server.Services
         {
             var account = await _accounts.FindAsync(login, password);
             if (account == null) return null;
+            if (_tokens.ContainsValue(login)) throw new MultiDeviceException("You cannot login in several devices at the same time.");
 
             var token = Guid.NewGuid().ToString();
             _tokens.Add(token, account.Id);
 
             return token;
+        }
+
+        public async Task<bool> Logout(string token)
+        {
+            return _tokens.Remove(token);
         }
 
         public bool IsAuthorized(string token)
