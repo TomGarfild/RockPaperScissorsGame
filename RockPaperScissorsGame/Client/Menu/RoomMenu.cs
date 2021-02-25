@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Server.Model;
 
@@ -27,7 +28,8 @@ namespace Client.Menu
                     "\t |     Scissors   -  press S     |",
                     "\t |     Exit Room  -  press E     |"
                 });
-            await SetHeaders();
+            var exit = await SetHeaders();
+            if (exit) return;
             do
             {
                 Console.Write("\r\t  Key: ");
@@ -59,18 +61,32 @@ namespace Client.Menu
             } while (true);
         }
 
-        private async Task SetHeaders()
+        private async Task<bool> SetHeaders()
         {
             var seriesUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + _seriesRoute);
-            var seriesTask =  _httpClient.GetAsync(seriesUri);
+            var seriesTask = _httpClient.GetAsync(seriesUri);
 
             if (_seriesRoute.Contains("Public"))
             {
-                Console.Write("\r\t  Trying to find your opponent. Press E to exit.");
+                Console.WriteLine("\r\t  Trying to find your opponent. Press E to exit.");
+                Console.Write("\r\t  Key: ");
                 while (seriesTask.Status != TaskStatus.RanToCompletion)
                 {
-                    
+                    if (Console.KeyAvailable)
+                    {
+                        Console.Write("\r\t  Key: ");
+                        var key = Console.ReadKey().Key;
+                        if (key == ConsoleKey.E)
+                        {
+                            Console.WriteLine("\n\t  You exit from public session.");
+                            await Task.Delay(1000);
+                            return true;
+                        }
+
+                        Console.Write("\b");
+                    }
                 }
+                Console.WriteLine("\n\t  Your opponent was found.");
             }
 
             var seriesJson = await (await seriesTask).Content.ReadAsStringAsync();
@@ -80,8 +96,17 @@ namespace Client.Menu
             })?.Id;
             
             _httpClient.DefaultRequestHeaders.Add("x-series", seriesId);
+            return false;
         }
 
+        private async Task Check()
+        {
+            var key = Console.ReadKey().Key;
+            if (key == ConsoleKey.E)
+            {
+
+            }
+        }
         public void SetRoutes(string seriesRoute, string gameRoute)
         {
             _seriesRoute = seriesRoute;

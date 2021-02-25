@@ -31,7 +31,7 @@ namespace Client.Menu
                         var response = await _httpClient.GetAsync(_httpClient.BaseAddress.AbsoluteUri + "/statistic/LocalStatistic");
                         break;
                     case ConsoleKey.D2:
-
+                        var responseGlobal = await _httpClient.GetAsync(_httpClient.BaseAddress.AbsoluteUri + "/statistic/GlobalStatistic");
                         break;
                     case ConsoleKey.E:
                         return;
