@@ -67,7 +67,7 @@ namespace Server.Model
                     return OptionChoice.Rock;
                 case "Paper":
                     return OptionChoice.Paper;
-                case "Scissor":
+                case "Scissors":
                     return OptionChoice.Scissor;
                 default:
                     return OptionChoice.Undefine;

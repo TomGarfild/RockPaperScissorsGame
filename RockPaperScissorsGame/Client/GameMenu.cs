@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Server;
 using Server.Model;
 
 namespace Client
@@ -26,6 +28,7 @@ namespace Client
                     "\t |     Computer     - press 3    |",
                     "\t |     Exit         - press E    |"
                 });
+            var roomMenu = new RoomMenu(_login, _httpClient);
             do
             {
                 Console.Write("\r\t  Key: ");
@@ -39,25 +42,7 @@ namespace Client
                         Console.WriteLine("2");
                         break;
                     case ConsoleKey.D3:
-                        var seriesUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/series/NewTrainingSeries");
-                        _httpClient.DefaultRequestHeaders.Add("x-login", _login);
-                        _httpClient.DefaultRequestHeaders.Accept.Add(
-                            new MediaTypeWithQualityHeaderValue("application/json"));
-                        var seriesJson = await (await _httpClient.GetAsync(seriesUri)).Content.ReadAsStringAsync();
-                        var series = JsonSerializer.Deserialize<Series>(seriesJson);
-                        _httpClient.DefaultRequestHeaders.Add("x-series", series?.Id);
-                        /*
-                         * case "Rock":
-                           return OptionChoice.Rock;
-                           case "Paper":
-                           return OptionChoice.Paper;
-                           case "Scissor":
-                         */
-                        _httpClient.DefaultRequestHeaders.Add("x-choice", "Rock");
-                        var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/round/TrainingPlay");
-                        var response = await _httpClient.GetAsync(uri);
-
-                        Console.WriteLine($"Result: {response.Content.ReadAsStringAsync().Result}");
+                        await roomMenu.Start();
                         break;
                     case ConsoleKey.E:
                         return;
