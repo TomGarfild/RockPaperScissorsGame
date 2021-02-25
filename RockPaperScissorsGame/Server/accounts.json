@@ -1,27 +1,22 @@
 [
   {
-    "id": "db85f0a2-c3e9-4cde-82eb-b13b4d02c8c4",
-    "login": "tom2228",
-    "password": "1245645555"
+    "id": "a06638c2-9935-4afd-a60c-fe65056bf01f",
+    "login": "tom",
+    "password": "qwerty"
   },
   {
-    "id": "45dff3c5-32e6-4bf9-a9ed-c9d34e0cc092",
-    "login": "jkjljkljklj",
-    "password": "rrrrrrrrrrr"
+    "id": "98bb8e3a-b1f0-4784-85c5-f71039bac5a8",
+    "login": "sonet",
+    "password": "123456"
   },
   {
-    "id": "954a8403-8fa0-4176-9410-2745651ea003",
-    "login": "kj;lkj",
-    "password": "ak;jdsfklasd"
+    "id": "9aed5e9d-8caf-4f38-88e5-96a2808b5083",
+    "login": "tom1",
+    "password": "1234qwer"
   },
   {
-    "id": "98538adb-3bd9-4b75-8757-df98dc535807",
-    "login": "tlk;jlkdsaj;flk",
-    "password": "jjjjjj"
-  },
-  {
-    "id": "87a7a913-3c10-46b2-95c9-a14f58fbfab0",
-    "login": "kl;jlk",
-    "password": "jjjjjjjjjjjj"
+    "id": "05e5b534-3969-4e24-be2a-162a6c73e60d",
+    "login": "lilya",
+    "password": "123456"
   }
 ]

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -88,7 +85,7 @@ namespace Server.Controllers
             string choice
         )
         {
-            if (!_authService.IsAuthorized(token))
+            if (_authService.IsAuthorized(token))
             {
                 var user = _authService.GetLogin(token);
                 if (!_seriesService.SeriesIs(series))
@@ -99,10 +96,8 @@ namespace Server.Controllers
                 _roundService.StartRoundTraining(user, series, choice);
                 return _roundService.GetResult(user, series).ToString();
             }
-            else
-            {
-                return StatusCode(401);
-            }
+
+            return StatusCode(401);
         }
     }
 }

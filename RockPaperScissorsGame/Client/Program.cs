@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Server.Models;
+using Client;
 
 namespace Client
 {
@@ -15,7 +15,7 @@ namespace Client
         public static async Task Main()
         {
             var httpClient = await GetHttpClient("settings.json");
-            var menu = new Menu(httpClient);
+            var menu = new RegistrationMenu(httpClient);
             await menu.Start();
         }
         private static async Task<HttpClient> GetHttpClient(string path)
