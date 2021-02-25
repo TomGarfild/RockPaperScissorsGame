@@ -15,7 +15,7 @@ namespace Client
         public static async Task Main()
         {
             var httpClient = await GetHttpClient("settings.json");
-            var menu = new Menu(httpClient);
+            var menu = new RegistrationMenu(httpClient);
             await menu.Start();
         }
         private static async Task<HttpClient> GetHttpClient(string path)
