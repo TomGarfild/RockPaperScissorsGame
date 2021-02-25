@@ -94,7 +94,8 @@ namespace Client.Menu
             {
                 PropertyNameCaseInsensitive = true
             })?.Id;
-            
+
+            _httpClient.DefaultRequestHeaders.Remove("x-series");
             _httpClient.DefaultRequestHeaders.Add("x-series", seriesId);
             return false;
         }

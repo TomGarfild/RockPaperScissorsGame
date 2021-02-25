@@ -18,5 +18,15 @@
     "id": "05e5b534-3969-4e24-be2a-162a6c73e60d",
     "login": "lilya",
     "password": "123456"
+  },
+  {
+    "id": "e189bede-74b0-4126-85ed-941d3f26465f",
+    "login": "tom2",
+    "password": "qwerty"
+  },
+  {
+    "id": "a06e7cab-12af-40ea-807c-ab2b8dfb8fe5",
+    "login": "tom3",
+    "password": "qwerty"
   }
 ]
