@@ -13,6 +13,6 @@ namespace Server.Service
         public void Add(string login, TimeSpan length, DateTimeOffset time, Round.Result result,
             Round.OptionChoice choice);
         public string GetStatisticItems(string login);
-        public Task<string> GetGlobalStatistic();
+        public string GetGlobalStatistic();
     }
 }

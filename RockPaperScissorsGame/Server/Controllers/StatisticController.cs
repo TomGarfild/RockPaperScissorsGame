@@ -39,7 +39,7 @@ namespace Server.Controllers
         [Route("GlobalStatistic")]
         public async Task<string> Global([FromServices] IStatisticService statisticService)
         {
-            return await statisticService.GetGlobalStatistic();
+            return  statisticService.GetGlobalStatistic();
         }
 
     }
