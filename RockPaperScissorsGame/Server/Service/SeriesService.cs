@@ -17,7 +17,7 @@ namespace Server.Service
         private readonly ConcurrentDictionary<string, string> _privateCode = new ConcurrentDictionary<string, string>();
         private readonly IMemoryCache _memoryCache;
         private readonly IOptions<TimeOptions> _timeOptions;
-        private Series _waiserSeries = null;
+        private Series _waitSeries = null;
         private MemoryCacheEntryOptions options = null;
         private static readonly object Ob = new object();
 
@@ -48,18 +48,18 @@ namespace Server.Service
         {
             lock (Ob)
             {
-                if (_waiserSeries != null)
+                if (_waitSeries != null)
                 {
-                    _waiserSeries.AddUser(user);
-                    var room = _waiserSeries;
-                    _waiserSeries = null;
+                    _waitSeries.AddUser(user);
+                    var room = _waitSeries;
+                    _waitSeries = null;
                     return room;
                 }
                 else
                 {
                     var room = new Series(user);
                     _memoryCache.Set(room.Id, room, options);
-                    _waiserSeries = room;
+                    _waitSeries = room;
                     return room;
                 }
             }
