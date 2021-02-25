@@ -21,14 +21,16 @@ namespace Client.Menu
 
         protected static string GetField(string name, int min, int max)
         {
+            var cursor = Console.CursorTop;
             Console.Write($"\t  Enter {name}: ");
             var field = Console.ReadLine()?.Trim();
+            
             while (field != null && (field.Length < min || field.Length > max))
             {
-                Console.SetCursorPosition(0, Console.CursorTop - 1);
+                Console.SetCursorPosition(0,  cursor);
                 Console.Write("\r" + new string(' ', Console.WindowWidth));
-                Console.SetCursorPosition(0, Console.CursorTop);
-                Console.Write($"\t  Enter {name}(min length = {min}, max length = {max}): ");
+                Console.SetCursorPosition(0, cursor);
+                Console.Write($"\r\t  Enter {name}(min length = {min}, max length = {max}): ");
                 field = Console.ReadLine()?.Trim();
             }
             return field;
