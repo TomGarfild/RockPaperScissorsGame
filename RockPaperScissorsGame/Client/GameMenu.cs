@@ -4,15 +4,20 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Client;
 using Server;
 using Server.Model;
 
-namespace Client
+namespace _httpClient
 {
     public class GameMenu : Menu
     {
-        public GameMenu(string token) : base(token)
+        private readonly HttpClient _httpClient;
+        private readonly string _token;
+        public GameMenu(HttpClient httpClient, string token)
         {
+            _httpClient = httpClient;
+            _token = token;
         }
         public override async Task Start()
         {
@@ -22,9 +27,10 @@ namespace Client
                     "\t |     Public Room  - press 1    |",
                     "\t |     Private Room - press 2    |",
                     "\t |     Computer     - press 3    |",
+                    "\t |     Statistic    - press 3    |",
                     "\t |     Exit         - press E    |"
                 });
-            var roomMenu = new RoomMenu();
+            var roomMenu = new RoomMenu(_httpClient, _token);
             do
             {
                 Console.Write("\r\t  Key: ");
