@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Server.Models;
 
-namespace Client
+namespace Client.Menu
 {
     public class RegistrationMenu : Menu
     {
