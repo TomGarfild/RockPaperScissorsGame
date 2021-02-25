@@ -29,11 +29,12 @@ namespace Client
                     "\t |    Scissors  - press S    |",
                     "\t |    Exit Room - press E    |"
                 });
+            await SetHeaders();
             do
             {
                 Console.Write("\r\t  Key: ");
                 var key = Console.ReadKey().Key;
-                var answer = string.Empty;
+                string answer;
                 switch (key)
                 {
                     case ConsoleKey.R:
@@ -47,22 +48,31 @@ namespace Client
                         break;
                     case ConsoleKey.E:
                         return;
+                    default:
+                        continue;
                 }
 
-                var seriesUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/series/NewTrainingSeries");
-                _httpClient.DefaultRequestHeaders.Add("x-login", _login);
-                _httpClient.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-                var seriesJson = await(await _httpClient.GetAsync(seriesUri)).Content.ReadAsStringAsync();
-                var series = JsonSerializer.Deserialize<Series>(seriesJson);
-                _httpClient.DefaultRequestHeaders.Add("x-series", series?.Id);
+                _httpClient.DefaultRequestHeaders.Remove("x-choice");
                 _httpClient.DefaultRequestHeaders.Add("x-choice", answer);
                 var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/round/TrainingPlay");
                 var response = await _httpClient.GetAsync(uri);
 
-                Console.WriteLine($"Result: {response.Content.ReadAsStringAsync().Result}");
+                Console.WriteLine($"\n\t  Result: {response.Content.ReadAsStringAsync().Result}");
             } while (true);
+        }
 
+        private async Task SetHeaders()
+        {
+            var seriesUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/series/NewTrainingSeries");
+            _httpClient.DefaultRequestHeaders.Add("x-login", _login);
+            _httpClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            var seriesJson = await(await _httpClient.GetAsync(seriesUri)).Content.ReadAsStringAsync();
+            var seriesId = JsonSerializer.Deserialize<Series>(seriesJson, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            })?.Id;
+            _httpClient.DefaultRequestHeaders.Add("x-series", seriesId);
         }
     }
 }
