@@ -11,14 +11,6 @@ namespace Client
 {
     public class RoomMenu : Menu
     {
-        private readonly HttpClient _httpClient;
-        private readonly string _login;
-
-        public RoomMenu(string login, HttpClient httpClient)
-        {
-            _login = login;
-            _httpClient = httpClient;
-        }
         public override async Task Start()
         {
             PrintMenu("\t |         Room Menu         |",
@@ -52,10 +44,10 @@ namespace Client
                         continue;
                 }
 
-                _httpClient.DefaultRequestHeaders.Remove("x-choice");
-                _httpClient.DefaultRequestHeaders.Add("x-choice", answer);
-                var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/round/TrainingPlay");
-                var response = await _httpClient.GetAsync(uri);
+                Client.DefaultRequestHeaders.Remove("x-choice");
+                Client.DefaultRequestHeaders.Add("x-choice", answer);
+                var uri = new Uri(Client.BaseAddress.AbsoluteUri + "/round/TrainingPlay");
+                var response = await Client.GetAsync(uri);
 
                 Console.WriteLine($"\n\t  Result: {response.Content.ReadAsStringAsync().Result}");
             } while (true);
@@ -63,16 +55,16 @@ namespace Client
 
         private async Task SetHeaders()
         {
-            var seriesUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/series/NewTrainingSeries");
-            _httpClient.DefaultRequestHeaders.Add("x-login", _login);
-            _httpClient.DefaultRequestHeaders.Accept.Add(
+            var seriesUri = new Uri(Client.BaseAddress.AbsoluteUri + "/series/NewTrainingSeries");
+            Client.DefaultRequestHeaders.Add("x-token", Token);
+            Client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
-            var seriesJson = await(await _httpClient.GetAsync(seriesUri)).Content.ReadAsStringAsync();
+            var seriesJson = await(await Client.GetAsync(seriesUri)).Content.ReadAsStringAsync();
             var seriesId = JsonSerializer.Deserialize<Series>(seriesJson, new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
             })?.Id;
-            _httpClient.DefaultRequestHeaders.Add("x-series", seriesId);
+            Client.DefaultRequestHeaders.Add("x-series", seriesId);
         }
     }
 }

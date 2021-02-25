@@ -6,12 +6,8 @@ namespace Client
 {
     public class GameMenu : Menu
     {
-        private readonly string _login;
-        private readonly HttpClient _httpClient;
-        public GameMenu(string login, HttpClient httpClient)
+        public GameMenu(string token) : base(token)
         {
-            _login = login;
-            _httpClient = httpClient;
         }
         public override async Task Start()
         {
@@ -23,7 +19,7 @@ namespace Client
                     "\t |     Computer     - press 3    |",
                     "\t |     Exit         - press E    |"
                 });
-            var roomMenu = new RoomMenu(_login, _httpClient);
+            var roomMenu = new RoomMenu();
             do
             {
                 Console.Write("\r\t  Key: ");

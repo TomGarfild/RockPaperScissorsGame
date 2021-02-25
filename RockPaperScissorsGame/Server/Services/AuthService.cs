@@ -42,5 +42,11 @@ namespace Server.Services
             if (token == null || !_tokens.ContainsKey(token)) return false;
             return true;
         }
+
+        public string GetLogin(string token)
+        {
+            if (token == null || !_tokens.ContainsKey(token)) return null;
+            return _tokens[token];
+        }
     }
 }
