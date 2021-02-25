@@ -19,13 +19,13 @@ namespace Client
         }
         public override async Task Start()
         {
-            PrintMenu("\t |         Room Menu         |",
+            PrintMenu("\t |           Room Menu           |",
                 new[]
                 {
-                    "\t |    Rock      - press R    |",
-                    "\t |    Paper     - press P    |",
-                    "\t |    Scissors  - press S    |",
-                    "\t |    Exit Room - press E    |"
+                    "\t |     Rock       -  press R     |",
+                    "\t |     Paper      -  press P     |",
+                    "\t |     Scissors   -  press S     |",
+                    "\t |     Exit Room  -  press E     |"
                 });
             await SetHeaders();
             do
