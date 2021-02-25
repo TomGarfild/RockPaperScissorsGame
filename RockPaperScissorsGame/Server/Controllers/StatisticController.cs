@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +25,7 @@ namespace Server.Controllers
         public async Task<ActionResult<string>> Local([FromHeader(Name = "x-token")][Required] string token,
         [FromServices] IStatisticService statisticService)
         {
-            if (!_authService.IsAuthorized(token))
+            if (_authService.IsAuthorized(token))
             {
                 var user = _authService.GetLogin(token);
                 return statisticService.GetStatisticItems(user);

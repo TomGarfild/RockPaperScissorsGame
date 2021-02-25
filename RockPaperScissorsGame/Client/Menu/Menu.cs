@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Client
+namespace Client.Menu
 {
     public abstract class Menu
     {
