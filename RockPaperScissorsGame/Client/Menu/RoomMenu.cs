@@ -99,14 +99,6 @@ namespace Client.Menu
             return false;
         }
 
-        private async Task Check()
-        {
-            var key = Console.ReadKey().Key;
-            if (key == ConsoleKey.E)
-            {
-
-            }
-        }
         public void SetRoutes(string seriesRoute, string gameRoute)
         {
             _seriesRoute = seriesRoute;
