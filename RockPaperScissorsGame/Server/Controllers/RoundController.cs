@@ -43,7 +43,7 @@ namespace Server.Controllers
             [FromServices] Stopwatch stopwatch
         )
         {
-            if (!_authService.IsAuthorized(token))
+            if (_authService.IsAuthorized(token))
             {
                 var user = _authService.GetLogin(token);
                 if (!_seriesService.SeriesIs(series))
