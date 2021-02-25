@@ -18,15 +18,13 @@ namespace Client
 
         public async Task Start()
         {
-            Console.Clear();
-            Console.WriteLine("\n\t-+-------------------------------+-");
-            Console.WriteLine("\t | Menu Rock Paper Scissors Game |");
-            Console.WriteLine("\t-+-------------------------------+-");
-            Console.WriteLine("\t |       Register - press R      |");
-            Console.WriteLine("\t |       Login    - press L      |");
-            Console.WriteLine("\t |       Exit     - press E      |");
-            Console.WriteLine("\t-+-------------------------------+-");
-            
+            PrintMenu("\t | Menu Rock Paper Scissors Game |", 
+                new []
+                {
+                    "\t |       Register - press R      |",
+                    "\t |       Login    - press L      |",
+                    "\t |       Exit     - press E      |"
+                });
             do
             {
                 Console.Write("\r\t  Key: ");
@@ -35,25 +33,36 @@ namespace Client
                 switch (key)
                 {
                     case ConsoleKey.R:
-                    case ConsoleKey.L:
-                        var content = GetContent();
-                        var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri +
-                                          (key == ConsoleKey.R ? "/register" : "/login"));
-                        var response = await _httpClient.PostAsync(uri, content);
-                        switch ((int)response.StatusCode)
+                        var regContent = GetContent();
+                        var regUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/register");
+                        var regResponse = await _httpClient.PostAsync(regUri, regContent);
+                        if ((int) regResponse.StatusCode == 200)
                         {
-                            case 200:
-                                Console.WriteLine("\t  OK");
-                                break;
-                            case 409:
-                                Console.WriteLine("\t  Login exists already");
-                                break;
-                            case 404:
-                                Console.WriteLine("\t  Such user wasn't found");
-                                break;
-                            default:
-                                Console.WriteLine("\t  Something went wrong");
-                                break;
+                            Console.WriteLine("\t Now you can login");
+                        }
+                        else
+                        {
+                            Console.WriteLine("\t  Login exists already");
+                        }
+                        break;
+                    case ConsoleKey.L:
+                        var loginContent = GetContent();
+                        var loginUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/register");
+                        var loginResponse = await _httpClient.PostAsync(loginUri, loginContent);
+                        if ((int)loginResponse.StatusCode == 200)
+                        {
+                            PrintMenu("\t | Menu Rock Paper Scissors Game |",
+                                new[]
+                                {
+                                    "\t |     Public Room  - press 1    |",
+                                    "\t |     Private Room - press 2    |",
+                                    "\t |     Computer     - press 3    |",
+                                    "\t |     Exit         - press E    |"
+                                });
+                        }
+                        else
+                        {
+                            Console.WriteLine("\t  Such user doesn't exist");
                         }
                         break;
                     case ConsoleKey.E:
@@ -78,6 +87,19 @@ namespace Client
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             return content;
+        }
+
+        private static void PrintMenu(string header, string[] fields)
+        {
+            Console.Clear();
+            Console.WriteLine("\n\t-+-------------------------------+-");
+            Console.WriteLine(header);
+            Console.WriteLine("\t-+-------------------------------+-");
+            foreach (var field in fields)
+            {
+                Console.WriteLine(field);
+            }
+            Console.WriteLine("\t-+-------------------------------+-");
         }
 
         private static string GetField(string name, int min, int max)
