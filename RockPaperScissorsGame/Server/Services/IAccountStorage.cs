@@ -8,5 +8,6 @@ namespace Server.Services
         public Task<bool> AddAsync(Account account);
 
         public Task<Account> FindAsync(string login, string password);
+        public string FindById(string id);
     }
 }

@@ -57,7 +57,7 @@ namespace Server.Model
             Source.Cancel();
             _user1Choice = Round.OptionChoice.Undefine;
             _user2Choice = Round.OptionChoice.Undefine;
-            Source = new CancellationTokenSource();
+            Source = new CancellationTokenSource() ;
         }
         public static OptionChoice ParseChoice(string choice)
         {

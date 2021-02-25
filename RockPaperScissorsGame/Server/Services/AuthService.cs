@@ -77,11 +77,12 @@ namespace Server.Services
 
         public string GetLogin(string token)
         {
+
             _semaphore.Wait();
             try
             {
                 if (token == null || !_tokens.ContainsKey(token)) return null;
-                return _tokens[token];
+            return _accounts.FindById(_tokens[token]);
             }
             finally
             {

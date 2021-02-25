@@ -47,14 +47,31 @@ namespace Server.Service
 
         public string GetGlobalStatistic()
         {
-            var list =_statisticContext.StatisticItems.GroupBy(s => s.Login).Where(s => s.Count() >= 10).ToList();
-            var str = new StringBuilder("");
-            str.AppendLine($"\tLogin\tWin");
-            var dic = new Dictionary<string, int>();
+            var list = _statisticContext.StatisticItems.Where(s=>s.Result ==Round.Result.Win).ToList();
+            var dic  = new Dictionary<string,int>();
             list.ForEach(l =>
             {
-                  str.Append($"\t{l.Key}\t");
-                  str.AppendLine(l.Count().ToString());
+                if (dic.ContainsKey(l.Login))
+                {
+                    dic[l.Login] += 1;
+                }
+                else
+                {
+                    dic.TryAdd(l.Login, 1);
+                }
+            });
+            var str = new StringBuilder("");
+            str.AppendLine($"\tLogin\tWin");
+
+            dic.OrderBy(d=>d.Value).Select(l =>
+            {
+                if (l.Value >= 10)
+                {
+                    str.Append($"\t{l.Key}\t");
+                    str.AppendLine(l.Value.ToString());
+                }
+
+                return "";
             });
             return str.ToString();
         }

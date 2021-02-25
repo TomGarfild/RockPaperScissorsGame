@@ -59,5 +59,10 @@ namespace Server.Services
                 _semaphore.Release();
             }
         }
+
+        public string FindById(string id)
+        {
+            return _storage.Find(a => a.Id == id).Login;
+        }
     }
 }
