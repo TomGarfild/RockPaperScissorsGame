@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
@@ -37,6 +38,15 @@ namespace Server.Controllers
             var token = await _authService.Login(account.Login, account.Password);
             if (token == null) return NotFound();
             return Ok(token);
+        }
+
+        [HttpDelete("logout/{token}")]
+        public async Task<IActionResult> Logout()
+        {
+            var token = (string)HttpContext.Request.RouteValues["token"];
+            var result = await _authService.Logout(token);
+            if (result) return Ok();
+            return NotFound();
         }
     }
 }

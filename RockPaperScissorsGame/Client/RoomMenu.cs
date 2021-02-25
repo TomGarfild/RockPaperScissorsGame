@@ -11,7 +11,8 @@ namespace Client
     {
         private readonly HttpClient _httpClient;
         private readonly string _token;
-
+        private string _seriesRoute;
+        private string _gameRoute;
         public RoomMenu(HttpClient httpClient, string token)
         {
             _httpClient = httpClient;
@@ -52,7 +53,7 @@ namespace Client
 
                 _httpClient.DefaultRequestHeaders.Remove("x-choice");
                 _httpClient.DefaultRequestHeaders.Add("x-choice", answer);
-                var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/round/TrainingPlay");
+                var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + _gameRoute);
                 var response = await _httpClient.GetAsync(uri);
 
                 Console.WriteLine($"\n\t  Result: {response.Content.ReadAsStringAsync().Result}");
@@ -61,16 +62,34 @@ namespace Client
 
         private async Task SetHeaders()
         {
-            var seriesUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/series/NewTrainingSeries");
-            _httpClient.DefaultRequestHeaders.Add("x-token", _token);
-            _httpClient.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
-            var seriesJson = await(await _httpClient.GetAsync(seriesUri)).Content.ReadAsStringAsync();
+            var seriesUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + _seriesRoute);
+            var seriesTask =  _httpClient.GetAsync(seriesUri);
+
+            if (_seriesRoute.Contains("Public"))
+            {
+                while (seriesTask.Status != TaskStatus.RanToCompletion)
+                {
+                    Console.Write("\r\t  Trying to find your opponent.");
+                    await Task.Delay(500);
+                    Console.Write(".");
+                    await Task.Delay(500);
+                    Console.Write(".");
+                }
+            }
+
+            var seriesJson = await (await seriesTask).Content.ReadAsStringAsync();
             var seriesId = JsonSerializer.Deserialize<Series>(seriesJson, new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
             })?.Id;
+            
             _httpClient.DefaultRequestHeaders.Add("x-series", seriesId);
+        }
+
+        public void SetRoutes(string seriesRoute, string gameRoute)
+        {
+            _seriesRoute = seriesRoute;
+            _gameRoute = gameRoute;
         }
     }
 }

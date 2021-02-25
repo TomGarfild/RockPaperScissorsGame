@@ -37,6 +37,11 @@ namespace Server.Services
             return token;
         }
 
+        public async Task<bool> Logout(string token)
+        {
+            return _tokens.Remove(token);
+        }
+
         public bool IsAuthorized(string token)
         {
             if (token == null || !_tokens.ContainsKey(token)) return false;

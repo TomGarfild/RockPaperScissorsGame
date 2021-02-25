@@ -26,7 +26,7 @@ namespace Server.Controllers
         public async Task<ActionResult<List<StatisticItem>>> Local([FromHeader(Name = "x-token")][Required] string token,
         [FromServices] StatisticService statisticService)
         {
-            if (!_authService.IsAuthorized(token))
+            if (_authService.IsAuthorized(token))
             {
                 var user = _authService.GetLogin(token);
                 return statisticService.GetStatisticItems(user).ToList();
@@ -38,8 +38,7 @@ namespace Server.Controllers
         }
         [HttpGet]
         [Route("GlobalStatistic")]
-        public async Task<List<StatisticItem>> Global([FromHeader(Name = "x-login")][Required] string user,
-            [FromServices] StatisticService statisticService)
+        public async Task<List<StatisticItem>> Global([FromServices] StatisticService statisticService)
         {
             return statisticService.GetGlobalStatistic().ToList();
         }
