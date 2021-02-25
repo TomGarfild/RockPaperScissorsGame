@@ -66,13 +66,10 @@ namespace Client.Menu
 
             if (_seriesRoute.Contains("Public"))
             {
+                Console.Write("\r\t  Trying to find your opponent. Press E to exit.");
                 while (seriesTask.Status != TaskStatus.RanToCompletion)
                 {
-                    Console.Write("\r\t  Trying to find your opponent.");
-                    await Task.Delay(500);
-                    Console.Write(".");
-                    await Task.Delay(500);
-                    Console.Write(".");
+                    
                 }
             }
 
