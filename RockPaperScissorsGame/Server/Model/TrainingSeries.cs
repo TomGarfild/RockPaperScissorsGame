@@ -7,6 +7,10 @@ namespace Server.Model
 {
     public class TrainingSeries:Series
     {
+        public TrainingSeries()
+        {
+
+        }
         public TrainingSeries(string user) : base(user)
         {
         }
@@ -19,5 +23,6 @@ namespace Server.Model
         {
             return _round.GetResult();
         }
+
     }
 }

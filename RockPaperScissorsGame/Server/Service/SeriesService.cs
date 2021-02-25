@@ -73,7 +73,7 @@ namespace Server.Service
         public PrivateSeries AddToPrivateSeries(string user)
         {
 
-            var series = new PrivateSeries();
+            var series = PrivateSeries.GetNewPrivateSeries();
             _memoryCache.Set(series.Id, series, options);
             _privateCode.TryAdd(series.Code, series.Id);
             return series;
