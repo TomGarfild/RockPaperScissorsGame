@@ -17,8 +17,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.0.7" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
-  </ItemGroup>
-
 </Project>
