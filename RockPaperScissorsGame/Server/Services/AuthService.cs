@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Server.Models;
 
@@ -9,6 +10,7 @@ namespace Server.Services
 
     {
         private readonly Dictionary<string, string> _tokens = new Dictionary<string, string>();
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
         private readonly IAccountStorage _accounts;
 
         public AuthService(IAccountStorage accounts)
@@ -18,12 +20,20 @@ namespace Server.Services
 
         public async Task<bool> Register(string login, string password)
         {
-            return await _accounts.AddAsync(new Account()
+            await _semaphore.WaitAsync();
+            try
             {
-                Id = Guid.NewGuid().ToString(),
-                Login = login,
-                Password = password
-            });
+                return await _accounts.AddAsync(new Account()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Login = login,
+                    Password = password
+                });
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         public async Task<string> Login(string login, string password)
@@ -39,19 +49,43 @@ namespace Server.Services
 
         public async Task<bool> Logout(string token)
         {
-            return _tokens.Remove(token);
+            await _semaphore.WaitAsync();
+            try
+            {
+                return _tokens.Remove(token);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         public bool IsAuthorized(string token)
         {
-            if (token == null || !_tokens.ContainsKey(token)) return false;
-            return true;
+            _semaphore.Wait();
+            try
+            {
+                if (token == null || !_tokens.ContainsKey(token)) return false;
+                return true;
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         public string GetLogin(string token)
         {
-            if (token == null || !_tokens.ContainsKey(token)) return null;
-            return _tokens[token];
+            _semaphore.Wait();
+            try
+            {
+                if (token == null || !_tokens.ContainsKey(token)) return null;
+                return _tokens[token];
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
     }
 }
