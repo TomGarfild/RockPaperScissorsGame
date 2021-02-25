@@ -118,5 +118,16 @@ namespace Server.Controllers
 
             return StatusCode(401);
         }
+        [HttpDelete]
+        [Route("CancelSeries")]
+        public async Task CancelSeries([FromHeader(Name = "x-token")] [Required]
+            string token, [FromHeader(Name = "x-series")] [Required]
+            string series)
+        {
+            if (_authService.IsAuthorized(token))
+            {
+                _seriesService.CancelSeries(series);
+            }
+        }
     }
 }

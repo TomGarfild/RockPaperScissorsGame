@@ -58,9 +58,9 @@ namespace Server.Controllers
                     if (token != null)
                         await Task.Delay(_options.Value.RoundTimeOut, (CancellationToken)tokenCancellationToken);
                 }
-                catch (TaskCanceledException)
+                catch (AggregateException errors)
                 {
-
+                    errors.Handle(e => e is TaskCanceledException);
                 }
 
                 var result = _roundService.GetResult(user, series);

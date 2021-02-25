@@ -45,13 +45,13 @@ namespace Server.Service
             return str.ToString();
         }
 
-        public async Task<string> GetGlobalStatistic()
+        public string GetGlobalStatistic()
         {
-           var list =_statisticContext.StatisticItems.GroupBy(s => s.Login).Where(s => s.Count() >= 10);
+            var list =_statisticContext.StatisticItems.GroupBy(s => s.Login).Where(s => s.Count() >= 10).ToList();
             var str = new StringBuilder("");
             str.AppendLine($"\tLogin\tWin");
             var dic = new Dictionary<string, int>();
-            await list.ForEachAsync(l =>
+            list.ForEach(l =>
             {
                   str.Append($"\t{l.Key}\t");
                   str.AppendLine(l.Count().ToString());
