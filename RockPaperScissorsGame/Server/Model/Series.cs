@@ -11,14 +11,12 @@ namespace Server.Model
     {
         public Series()
         {
-            IsFull = false;
-            IsDeleted = false;
-            Id = Guid.NewGuid().ToString();
+            
         }
 
         protected Round _round = new Round();
         private bool _checkResult = false;
-        public string Id { get; }
+        public string Id { get; set; }
         public List<string> Users { get;  } = new List<string>();
         public bool IsFull{get; set; }
         public bool IsDeleted { get; set; }

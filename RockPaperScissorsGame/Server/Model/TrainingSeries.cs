@@ -7,6 +7,10 @@ namespace Server.Model
 {
     public class TrainingSeries:Series
     {
+        public TrainingSeries()
+        {
+
+        }
         public TrainingSeries(string user) : base(user)
         {
         }
@@ -18,6 +22,12 @@ namespace Server.Model
         public override Round.Result GetResult(string user)
         {
             return _round.GetResult();
+        }
+
+        public TrainingSeries GetNewTrainingSeries()
+        {
+            return new TrainingSeries() {IsFull = false, IsDeleted = false, Id = Guid.NewGuid().ToString()};
+
         }
     }
 }
