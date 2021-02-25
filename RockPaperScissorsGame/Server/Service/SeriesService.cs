@@ -93,5 +93,13 @@ namespace Server.Service
             _memoryCache.Set(series.Id, series, options);
             return series;
         }
+
+        public void CancelSeries(string series)
+        {
+            if (_waitSeries.Id == series)
+                _waitSeries = null;
+            if(SeriesIs(series))
+                _memoryCache.Remove(series);
+        }
     }
 }

@@ -17,5 +17,6 @@ namespace Server.Service
         public void Check();
         public bool SeriesIs(string key);
         public Series GetSeries(string key);
+        public void CancelSeries(string series);
     }
 }

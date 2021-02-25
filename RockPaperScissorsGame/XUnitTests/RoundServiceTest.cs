@@ -16,14 +16,16 @@ namespace XUnitTests
         {
             var seriesService = new Mock<ISeriesService>();
             var seriesKey = "444444";
-            var user = "aaa";
-            var series = new Series(user);
+            var user1 = "aaa";
+            var user2 = "bbb";
+            var series = new Series(user1);
+            series.AddUser(user2);
             seriesService.Setup(s => s.GetSeries(seriesKey)).Returns(series);
             var roundService = new RoundService(seriesService.Object);
 
-            //roundService.StartRound(user,seriesKey,Round.OptionChoice.Rock);
+            //roundService.StartRound(user,seriesKey,"Rock");
 
-            Assert.Equal("aaa", series.Users[0]);
+           // series.Ver
             Assert.False(series.IsFull);
             Assert.False(series.IsDeleted);
         }
