@@ -9,8 +9,10 @@ namespace Client
 {
     public class RegistrationMenu : Menu
     {
-        public RegistrationMenu(HttpClient httpClient) : base(httpClient)
+        private readonly HttpClient _httpClient;
+        public RegistrationMenu(HttpClient httpClient)
         {
+            _httpClient = httpClient;
         }
 
         public override async Task Start()
@@ -31,8 +33,8 @@ namespace Client
                 {
                     case ConsoleKey.R:
                         var regContent = GetContent();
-                        var regUri = new Uri(Client.BaseAddress.AbsoluteUri + "/account/register");
-                        var regResponse = await Client.PostAsync(regUri, regContent);
+                        var regUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/account/register");
+                        var regResponse = await _httpClient.PostAsync(regUri, regContent);
                         if ((int) regResponse.StatusCode == 200)
                         {
                             Console.WriteLine("\t  Now you can login");
@@ -44,13 +46,15 @@ namespace Client
                         break;
                     case ConsoleKey.L:
                         var loginContent = GetContent();
-                        var loginUri = new Uri(Client.BaseAddress.AbsoluteUri + "/account/login");
-                        var loginResponse = await Client.PostAsync(loginUri, loginContent);
+                        var loginUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/account/login");
+                        var loginResponse = await _httpClient.PostAsync(loginUri, loginContent);
                         if ((int) loginResponse.StatusCode == 200)
                         {
                             Console.WriteLine("\t  Your LogIn was successful.");
                             await Task.Delay(1000);
-                            var menu = new GameMenu((await loginResponse.Content.ReadAsStringAsync()));
+                            var token = await loginResponse.Content.ReadAsStringAsync();
+                            token = token.Substring(1, token.Length - 2);
+                            var menu = new GameMenu(_httpClient, token);
                             await menu.Start();
                             return;
                         }

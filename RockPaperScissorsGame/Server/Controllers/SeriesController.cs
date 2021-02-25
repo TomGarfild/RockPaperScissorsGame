@@ -63,16 +63,14 @@ namespace Server.Controllers
         public async Task<ActionResult<PrivateSeries>> NewPrivateSeries([FromHeader(Name = "x-token")] [Required]
             string token)
         {
-            if (!_authService.IsAuthorized(token))
+            if (_authService.IsAuthorized(token))
             {
                 var user = _authService.GetLogin(token);
                 var series = _seriesService.AddToPrivateSeries(user); // ToDo add user id who send request
                 return series;
             }
-            else
-            {
-                return StatusCode(401);
-            }
+
+            return StatusCode(401);
         }
 
         [HttpGet]
@@ -83,7 +81,7 @@ namespace Server.Controllers
             string code)
         {
 
-            if (!_authService.IsAuthorized(token))
+            if (_authService.IsAuthorized(token))
             {
                 var user = _authService.GetLogin(token);
                 var series =
@@ -100,15 +98,10 @@ namespace Server.Controllers
                 {
                     return StatusCode(423);
                 }
-                else
-                {
-                    return series;
-                }
+
+                return series;
             }
-            else
-            {
-                return StatusCode(401);
-            }
+            return StatusCode(401);
         }
 
         [HttpGet]
@@ -116,16 +109,14 @@ namespace Server.Controllers
         public async Task<ActionResult<TrainingSeries>> NewTrainingSeries([FromHeader(Name = "x-token")] [Required]
             string token)
         {
-            if (!_authService.IsAuthorized(token))
+            if (_authService.IsAuthorized(token))
             {
                 var user = _authService.GetLogin(token);
                 var series = _seriesService.AddToTrainingSeries(user); // ToDo add user id who send request
                 return series;
             }
-            else
-            {
-                return StatusCode(401);
-            }
+
+            return StatusCode(401);
         }
     }
 }
