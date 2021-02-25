@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Server
+namespace Server.Services
 {
     public class JsonWorker<T> where T: new()
     {
