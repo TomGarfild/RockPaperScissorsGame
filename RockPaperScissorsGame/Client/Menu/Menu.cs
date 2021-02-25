@@ -9,20 +9,20 @@ namespace Client.Menu
         protected static void PrintMenu(string header, string[] fields)
         {
             Console.Clear();
-            Console.WriteLine("\n\t-+-------------------------------+-");
+            Console.WriteLine("\n+-------------------------------+");
             Console.WriteLine(header);
-            Console.WriteLine("\t-+-------------------------------+-");
+            Console.WriteLine("+-------------------------------+");
             foreach (var field in fields)
             {
                 Console.WriteLine(field);
             }
-            Console.WriteLine("\t-+-------------------------------+-");
+            Console.WriteLine("+-------------------------------+");
         }
 
         protected static string GetField(string name, int min, int max)
         {
             var cursor = Console.CursorTop;
-            Console.Write($"\t  Enter {name}: ");
+            Console.Write($"Enter {name}: ");
             var field = Console.ReadLine()?.Trim();
             
             while (field != null && (field.Length < min || field.Length > max))
@@ -30,7 +30,7 @@ namespace Client.Menu
                 Console.SetCursorPosition(0,  cursor);
                 Console.Write("\r" + new string(' ', Console.WindowWidth));
                 Console.SetCursorPosition(0, cursor);
-                Console.Write($"\r\t  Enter {name}(min length = {min}, max length = {max}): ");
+                Console.Write($"\rEnter {name}(min length = {min}, max length = {max}): ");
                 field = Console.ReadLine()?.Trim();
             }
             return field;

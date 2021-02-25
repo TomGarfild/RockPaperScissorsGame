@@ -20,19 +20,21 @@ namespace Client.Menu
         }
         public override async Task Start()
         {
-            PrintMenu("\t |           Room Menu           |",
-                new[]
-                {
-                    "\t |     Rock       -  press R     |",
-                    "\t |     Paper      -  press P     |",
-                    "\t |     Scissors   -  press S     |",
-                    "\t |     Exit Room  -  press E     |"
-                });
             var exit = await SetHeaders();
             if (exit) return;
+
+            PrintMenu("|           Room Menu           |",
+                new[]
+                {
+                    "|     Rock       -  press R     |",
+                    "|     Paper      -  press P     |",
+                    "|     Scissors   -  press S     |",
+                    "|     Exit Room  -  press E     |"
+                });
+            
             do
             {
-                Console.Write("\r\t  Key: ");
+                Console.Write("\rKey: ");
                 var key = Console.ReadKey().Key;
                 string answer;
                 switch (key)
@@ -57,7 +59,7 @@ namespace Client.Menu
                 var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + _gameRoute);
                 var response = await _httpClient.GetAsync(uri);
 
-                Console.WriteLine($"\n\t  Result: {response.Content.ReadAsStringAsync().Result}");
+                Console.WriteLine($"\nResult: {response.Content.ReadAsStringAsync().Result}");
             } while (true);
         }
 
@@ -68,17 +70,17 @@ namespace Client.Menu
 
             if (_seriesRoute.Contains("Public"))
             {
-                Console.WriteLine("\r\t  Trying to find your opponent. Press E to exit.");
-                Console.Write("\r\t  Key: ");
+                Console.WriteLine("\rTrying to find your opponent. Press E to exit.");
+                Console.Write("\rKey: ");
                 while (seriesTask.Status != TaskStatus.RanToCompletion)
                 {
                     if (Console.KeyAvailable)
                     {
-                        Console.Write("\r\t  Key: ");
+                        Console.Write("\rKey: ");
                         var key = Console.ReadKey().Key;
                         if (key == ConsoleKey.E)
                         {
-                            Console.WriteLine("\n\t  You exit from public session.");
+                            Console.WriteLine("\nYou exit from public session.");
                             await Task.Delay(1000);
                             return true;
                         }
@@ -86,7 +88,22 @@ namespace Client.Menu
                         Console.Write("\b");
                     }
                 }
-                Console.WriteLine("\n\t  Your opponent was found.");
+                Console.WriteLine("\nYour opponent was found.");
+            }
+            else if (_seriesRoute.Contains("Private"))
+            {
+                var privateSeriesJson = await (await seriesTask).Content.ReadAsStringAsync();
+                var privateSeries = JsonSerializer.Deserialize<PrivateSeries>(privateSeriesJson, new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                _httpClient.DefaultRequestHeaders.Remove("x-series");
+                _httpClient.DefaultRequestHeaders.Add("x-series", privateSeries.Id);
+
+                _httpClient.DefaultRequestHeaders.Remove("x-code");
+                _httpClient.DefaultRequestHeaders.Add("x-code", privateSeries.Code);
+                return false;
             }
 
             var seriesJson = await (await seriesTask).Content.ReadAsStringAsync();
