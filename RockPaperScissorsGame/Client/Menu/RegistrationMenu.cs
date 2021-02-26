@@ -17,16 +17,16 @@ namespace Client.Menu
 
         public override async Task Start()
         {
-            PrintMenu("\t | Menu Rock Paper Scissors Game |", 
+            PrintMenu("| Menu Rock Paper Scissors Game |", 
                 new []
                 {
-                    "\t |       Register - press R      |",
-                    "\t |       Login    - press L      |",
-                    "\t |       Exit     - press E      |"
+                    "|       Register - press R      |",
+                    "|       Login    - press L      |",
+                    "|       Exit     - press E      |"
                 });
             do
             {
-                Console.Write("\r\t  Key: ");
+                Console.Write("\rKey: ");
                 var key = Console.ReadKey().Key;
 
                 switch (key)
@@ -37,11 +37,11 @@ namespace Client.Menu
                         var regResponse = await _httpClient.PostAsync(regUri, regContent);
                         if ((int) regResponse.StatusCode == 200)
                         {
-                            Console.WriteLine("\t  Now you can login");
+                            Console.WriteLine("Now you can login");
                         }
                         else
                         {
-                            Console.WriteLine("\t  Login exists already");
+                            Console.WriteLine("Login exists already");
                         }
                         break;
                     case ConsoleKey.L:
@@ -50,7 +50,7 @@ namespace Client.Menu
                         var loginResponse = await _httpClient.PostAsync(loginUri, loginContent);
                         if ((int) loginResponse.StatusCode == 200)
                         {
-                            Console.WriteLine("\t  Your LogIn was successful.");
+                            Console.WriteLine("Your LogIn was successful.");
                             await Task.Delay(1000);
                             var token = await loginResponse.Content.ReadAsStringAsync();
                             token = token.Substring(1, token.Length - 2);
@@ -60,7 +60,7 @@ namespace Client.Menu
                         }
                         else
                         {
-                            Console.WriteLine("\t  Such user doesn't exist");
+                            Console.WriteLine("Such user doesn't exist");
                         }
                         break;
                     case ConsoleKey.E:

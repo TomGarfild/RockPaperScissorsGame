@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Server.Model;
 
@@ -19,18 +20,21 @@ namespace Client.Menu
         }
         public override async Task Start()
         {
-            PrintMenu("\t |           Room Menu           |",
+            var exit = await SetHeaders();
+            if (exit) return;
+
+            PrintMenu("|           Room Menu           |",
                 new[]
                 {
-                    "\t |     Rock       -  press R     |",
-                    "\t |     Paper      -  press P     |",
-                    "\t |     Scissors   -  press S     |",
-                    "\t |     Exit Room  -  press E     |"
+                    "|     Rock       -  press R     |",
+                    "|     Paper      -  press P     |",
+                    "|     Scissors   -  press S     |",
+                    "|     Exit Room  -  press E     |"
                 });
-            await SetHeaders();
+            
             do
             {
-                Console.Write("\r\t  Key: ");
+                Console.Write("\rKey: ");
                 var key = Console.ReadKey().Key;
                 string answer;
                 switch (key)
@@ -55,25 +59,51 @@ namespace Client.Menu
                 var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + _gameRoute);
                 var response = await _httpClient.GetAsync(uri);
 
-                Console.WriteLine($"\n\t  Result: {response.Content.ReadAsStringAsync().Result}");
+                Console.WriteLine($"\nResult: {response.Content.ReadAsStringAsync().Result}");
             } while (true);
         }
 
-        private async Task SetHeaders()
+        private async Task<bool> SetHeaders()
         {
             var seriesUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + _seriesRoute);
-            var seriesTask =  _httpClient.GetAsync(seriesUri);
+            var seriesTask = _httpClient.GetAsync(seriesUri);
 
             if (_seriesRoute.Contains("Public"))
             {
+                Console.WriteLine("\rTrying to find your opponent. Press E to exit.");
+                Console.Write("\rKey: ");
                 while (seriesTask.Status != TaskStatus.RanToCompletion)
                 {
-                    Console.Write("\r\t  Trying to find your opponent.");
-                    await Task.Delay(500);
-                    Console.Write(".");
-                    await Task.Delay(500);
-                    Console.Write(".");
+                    if (Console.KeyAvailable)
+                    {
+                        Console.Write("\rKey: ");
+                        var key = Console.ReadKey().Key;
+                        if (key == ConsoleKey.E)
+                        {
+                            Console.WriteLine("\nYou exit from public session.");
+                            await Task.Delay(1000);
+                            return true;
+                        }
+
+                        Console.Write("\b");
+                    }
                 }
+                Console.WriteLine("\nYour opponent was found.");
+            }
+            else if (_seriesRoute.Contains("Private"))
+            {
+                var privateSeriesJson = await (await seriesTask).Content.ReadAsStringAsync();
+                var privateSeries = JsonSerializer.Deserialize<PrivateSeries>(privateSeriesJson, new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                _httpClient.DefaultRequestHeaders.Remove("x-series");
+                _httpClient.DefaultRequestHeaders.Add("x-series", privateSeries.Id);
+
+                _httpClient.DefaultRequestHeaders.Remove("x-code");
+                _httpClient.DefaultRequestHeaders.Add("x-code", privateSeries.Code);
+                return false;
             }
 
             var seriesJson = await (await seriesTask).Content.ReadAsStringAsync();
@@ -81,8 +111,10 @@ namespace Client.Menu
             {
                 PropertyNameCaseInsensitive = true
             })?.Id;
-            
+
+            _httpClient.DefaultRequestHeaders.Remove("x-series");
             _httpClient.DefaultRequestHeaders.Add("x-series", seriesId);
+            return false;
         }
 
         public void SetRoutes(string seriesRoute, string gameRoute)
