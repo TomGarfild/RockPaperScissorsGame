@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Serilog;
 using Server.Models;
 
 namespace Client.Menu
@@ -28,7 +29,6 @@ namespace Client.Menu
             {
                 Console.Write("\rKey: ");
                 var key = Console.ReadKey().Key;
-
                 switch (key)
                 {
                     case ConsoleKey.R:
