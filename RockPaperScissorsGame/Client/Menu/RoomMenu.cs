@@ -62,7 +62,7 @@ namespace Client.Menu
                 var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + _gameRoute);
                 var response = await _httpClient.GetAsync(uri);
 
-                Console.WriteLine($"\nResult: {response.Content.ReadAsStringAsync().Result}");
+                Console.WriteLine($"\nResult: {response.Content.ReadAsAsync<string>().Result}");
             } while (true);
         }
 

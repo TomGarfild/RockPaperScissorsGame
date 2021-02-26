@@ -30,7 +30,7 @@ namespace Server.Services
             var str = new StringBuilder($"Login: {list[0].Login}\n");
             var time = new TimeSpan();
             list.Select(l => time.Add(l.Length));
-            str.AppendLine($"Total time: {time}");
+            str.AppendLine($"Total time: {time.ToString()}");
             str.AppendLine($"Total Game: {list.Count}");
             var win = list.Count(l => l.Result == Round.Result.Win);
             str.AppendLine($"Part Win: {win * 100 / list.Count}%");
