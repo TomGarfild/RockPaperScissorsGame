@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Xunit;
 using Moq;
@@ -22,13 +23,22 @@ namespace XUnitTests
             var memoryCache = serviceProvider.GetService<IMemoryCache>();
             return memoryCache;
         }
+        public ILogger<T> GetLogger<T>()
+        {
+            var services = new ServiceCollection();
+            services.AddLogging();
+            var serviceProvider = services.BuildServiceProvider();
+
+            var logger = serviceProvider.GetService<ILogger<T>>();
+            return logger;
+        }
         [Fact]
         public void TestCreatePublicSeries()
         {
             var mockcach = GetMemoryCache();
             var mockOptions = new Mock<IOptions<TimeOptions>>();
             mockOptions.Setup(m => m.Value).Returns(new TimeOptions() { SeriesTimeOut = TimeSpan.FromMinutes(5) });
-            var seriesService = new SeriesService(mockcach, mockOptions.Object);
+            var seriesService = new SeriesService(mockcach, mockOptions.Object, GetLogger<SeriesService>());
 
             var series = seriesService.AddToPublicSeries("aaa");
 
@@ -42,7 +52,7 @@ namespace XUnitTests
             var mockcach = GetMemoryCache();
             var mockOptions = new Mock<IOptions<TimeOptions>>();
             mockOptions.Setup(m => m.Value).Returns(new TimeOptions() { SeriesTimeOut = TimeSpan.FromMinutes(5) });
-            var seriesService = new SeriesService(mockcach, mockOptions.Object);
+            var seriesService = new SeriesService(mockcach, mockOptions.Object, GetLogger<SeriesService>());
 
             seriesService.AddToPublicSeries("aaa");
             var series = seriesService.AddToPublicSeries("bbb");
@@ -58,7 +68,7 @@ namespace XUnitTests
             var mockcach = GetMemoryCache();
             var mockOptions = new Mock<IOptions<TimeOptions>>();
             mockOptions.Setup(m => m.Value).Returns(new TimeOptions() { SeriesTimeOut = TimeSpan.FromMinutes(5) });
-            var seriesService = new SeriesService(mockcach, mockOptions.Object);
+            var seriesService = new SeriesService(mockcach, mockOptions.Object, GetLogger<SeriesService>());
 
             var series = seriesService.AddToPrivateSeries("aaa");
 
@@ -73,7 +83,7 @@ namespace XUnitTests
             var mockcach = GetMemoryCache();
             var mockOptions = new Mock<IOptions<TimeOptions>>();
             mockOptions.Setup(m => m.Value).Returns(new TimeOptions() { SeriesTimeOut = TimeSpan.FromMinutes(5) });
-            var seriesService = new SeriesService(mockcach, mockOptions.Object);
+            var seriesService = new SeriesService(mockcach, mockOptions.Object, GetLogger<SeriesService>());
 
             var series = seriesService.AddToPrivateSeries("aaa");
             series = seriesService.SearchAndAddToPrivateSeries("aaa", series.Code);
@@ -88,7 +98,7 @@ namespace XUnitTests
             var mockcach = GetMemoryCache();
             var mockOptions = new Mock<IOptions<TimeOptions>>();
             mockOptions.Setup(m => m.Value).Returns(new TimeOptions() { SeriesTimeOut = TimeSpan.FromMinutes(5) });
-            var seriesService = new SeriesService(mockcach, mockOptions.Object);
+            var seriesService = new SeriesService(mockcach, mockOptions.Object, GetLogger<SeriesService>());
 
             var seriesEmpty = seriesService.AddToPrivateSeries("aaa");
             seriesService.SearchAndAddToPrivateSeries("aaa", seriesEmpty.Code);
@@ -104,7 +114,7 @@ namespace XUnitTests
             var mockcach = GetMemoryCache();
             var mockOptions = new Mock<IOptions<TimeOptions>>();
             mockOptions.Setup(m => m.Value).Returns(new TimeOptions() { SeriesTimeOut = TimeSpan.FromMinutes(5) });
-            var seriesService = new SeriesService(mockcach, mockOptions.Object);
+            var seriesService = new SeriesService(mockcach, mockOptions.Object, GetLogger<SeriesService>());
 
             var series = seriesService.AddToTrainingSeries("aaa");
 
@@ -119,7 +129,7 @@ namespace XUnitTests
             var mockcach = GetMemoryCache();
             var mockOptions = new Mock<IOptions<TimeOptions>>();
             mockOptions.Setup(m => m.Value).Returns(new TimeOptions() { SeriesTimeOut = TimeSpan.FromMinutes(5) });
-            var seriesService = new SeriesService(mockcach, mockOptions.Object);
+            var seriesService = new SeriesService(mockcach, mockOptions.Object, GetLogger<SeriesService>());
 
             var series = seriesService.AddToPublicSeries("aaa");
 
@@ -131,7 +141,7 @@ namespace XUnitTests
             var mockcach = GetMemoryCache();
             var mockOptions = new Mock<IOptions<TimeOptions>>();
             mockOptions.Setup(m => m.Value).Returns(new TimeOptions() { SeriesTimeOut = TimeSpan.FromMinutes(5) });
-            var seriesService = new SeriesService(mockcach, mockOptions.Object);
+            var seriesService = new SeriesService(mockcach, mockOptions.Object, GetLogger<SeriesService>());
             Assert.False(seriesService.SeriesIs(Guid.NewGuid().ToString()));
         }
         [Fact]
@@ -140,7 +150,7 @@ namespace XUnitTests
             var mockcach = GetMemoryCache();
             var mockOptions = new Mock<IOptions<TimeOptions>>();
             mockOptions.Setup(m => m.Value).Returns(new TimeOptions() { SeriesTimeOut = TimeSpan.FromMinutes(5) });
-            var seriesService = new SeriesService(mockcach, mockOptions.Object);
+            var seriesService = new SeriesService(mockcach, mockOptions.Object, GetLogger<SeriesService>());
 
             var series = seriesService.AddToPublicSeries("aaa");
 

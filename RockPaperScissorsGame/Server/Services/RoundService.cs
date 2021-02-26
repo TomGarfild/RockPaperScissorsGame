@@ -37,7 +37,7 @@ namespace Server.Services
 
         public Round.Result GetResult(string user, string seriesKey)
         {
-            if (_seriesService.SeriesIs(seriesKey))
+            if (_seriesService.SeriesIs(seriesKey) && _seriesService.GetSeries(seriesKey).IsRoundDone())
                 return _seriesService.GetSeries(seriesKey).GetResult(user);
             else
                 return Round.Result.Undefine;

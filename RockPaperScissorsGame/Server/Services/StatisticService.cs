@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Server.Models;
 using Server.StatisticStorage;
 
@@ -43,7 +44,7 @@ namespace Server.Services
 
         public string GetGlobalStatistic()
         {
-            var list = _statisticContext.StatisticItems.Where(s=>s.Result ==Round.Result.Win).ToList();
+            var list = _statisticContext.StatisticItems.Where(s=>s.Result == Round.Result.Win).ToList();
             var dic  = new Dictionary<string,int>();
             list.ForEach(l =>
             {
@@ -56,17 +57,29 @@ namespace Server.Services
                     dic.TryAdd(l.Login, 1);
                 }
             });
+            var dicSort =dic.Where(d => d.Value >= 10);
             var str = new StringBuilder("");
             str.AppendLine($"\tLogin\tWin");
-
-            dic.OrderBy(d=>d.Value).Select(l =>
+            var dic1 = new Dictionary<string, int>();
+            _statisticContext.StatisticItems.ToList().ForEach(l =>
             {
-                if (l.Value >= 10)
+                if (dicSort.Any(d=>d.Key==l.Login))
                 {
-                    str.Append($"\t{l.Key}\t");
-                    str.AppendLine(l.Value.ToString());
+                    if (dic1.ContainsKey(l.Login))
+                    {
+                        dic1[l.Login] += 1;
+                    }
+                    else
+                    {
+                        dic1.TryAdd(l.Login, 1);
+                    }
                 }
+            });
+            dic1.OrderBy(d=>d.Value).Select(l =>
+            {
 
+                str.Append($"\t{l.Key}\t");
+                str.AppendLine(l.Value.ToString());
                 return "";
             });
             return str.ToString();

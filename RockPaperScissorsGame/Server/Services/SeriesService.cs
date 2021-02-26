@@ -66,7 +66,7 @@ namespace Server.Services
 
         public bool SeriesIs(string key)
         {
-            return _memoryCache.TryGetValue(key, out _);
+            return _memoryCache.TryGetValue(key, out var series) && (!((Series)series).IsDeleted);
         }
 
         public PrivateSeries AddToPrivateSeries(string user)
