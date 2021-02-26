@@ -61,8 +61,14 @@ namespace Client.Menu
                 _httpClient.DefaultRequestHeaders.Add("x-choice", answer);
                 var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + _gameRoute);
                 var response = await _httpClient.GetAsync(uri);
-
-                Console.WriteLine($"\nResult: {response.Content.ReadAsAsync<string>().Result}");
+                var result = response.Content.ReadAsAsync<string>().Result;
+                if (result.Equals("Undefine"))
+                {
+                    await Task.Delay(3000);
+                    Console.WriteLine("\nYour opponent didn't make a choice. You will be redirected to menu.");
+                    return;
+                }
+                Console.WriteLine($"\nResult: {result}");
             } while (true);
         }
 

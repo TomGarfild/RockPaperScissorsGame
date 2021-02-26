@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Server.Models;
+using Server.StatisticStorage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Server.Models;
-using Server.StatisticStorage;
 
 namespace Server.Services
 {
@@ -33,7 +32,7 @@ namespace Server.Services
 
             var str = new StringBuilder($"Login: {list[0].Login}\n");
             var time = new TimeSpan();
-            list.Select(l => time.Add(l.Length));
+            list.ForEach(l => time = time.Add(l.Length));
             str.AppendLine($"Total time: {time.ToString()}");
             str.AppendLine($"Total Game: {list.Count}");
             var win = list.Count(l => l.Result == Round.Result.Win);
