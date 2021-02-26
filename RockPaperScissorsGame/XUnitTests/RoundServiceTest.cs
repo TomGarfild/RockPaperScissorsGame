@@ -19,10 +19,12 @@ namespace XUnitTests
             seriesService.Setup(s => s.GetSeries(seriesKey)).Returns(series);
             var roundService = new RoundService(seriesService.Object);
 
-            //roundService.StartRound(user,seriesKey,"Rock");
+            var token1= roundService.StartRound(user1,seriesKey,"Rock");
+            var token2 = roundService.StartRound(user2, seriesKey, "Paper");
 
-           // series.Ver
-            Assert.False(series.IsFull);
+
+            Assert.Null(token2);
+            Assert.True(series.IsFull);
             Assert.False(series.IsDeleted);
         }
     }

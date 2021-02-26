@@ -54,7 +54,7 @@ namespace Server.Controllers
                 var tokenCancellationToken = _roundService.StartRound(user, series, choice);
                 try
                 {
-                    if (token != null)
+                    if (tokenCancellationToken != null)
                         await Task.Delay(_options.Value.RoundTimeOut, (CancellationToken)tokenCancellationToken);
                 }
                 catch (TaskCanceledException)
