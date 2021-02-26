@@ -48,8 +48,9 @@ namespace Client.Menu
                         var loginContent = GetContent();
                         var loginUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/account/login");
                         var loginResponse = await _httpClient.PostAsync(loginUri, loginContent);
-                        if ((int) loginResponse.StatusCode == 200)
+                        if (loginResponse.IsSuccessStatusCode)
                         {
+                            loginResponse.EnsureSuccessStatusCode();
                             Console.WriteLine("Your LogIn was successful.");
                             await Task.Delay(1000);
                             var token = await loginResponse.Content.ReadAsStringAsync();
@@ -58,10 +59,15 @@ namespace Client.Menu
                             await menu.Start();
                             return;
                         }
+                        else if ((int)loginResponse.StatusCode == 400)
+                        {
+                            Console.WriteLine("You cannot login in several devices at the same time.");
+                        }
                         else
                         {
                             Console.WriteLine("Such user doesn't exist");
                         }
+
                         break;
                     case ConsoleKey.E:
                         return;

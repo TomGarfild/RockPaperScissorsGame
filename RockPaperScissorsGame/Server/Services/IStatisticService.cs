@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using System.Threading.Tasks;
-using Server.Model;
-using Server.StatisticStorege;
+using Server.Models;
 
-namespace Server.Service
+namespace Server.Services
 {
     public interface IStatisticService
     {

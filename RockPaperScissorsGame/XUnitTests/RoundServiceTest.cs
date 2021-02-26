@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using Moq;
-using Server.Model;
-using Server.Service;
+﻿using Moq;
+using Server.Models;
+using Server.Services;
 using Xunit;
 
 namespace XUnitTests
