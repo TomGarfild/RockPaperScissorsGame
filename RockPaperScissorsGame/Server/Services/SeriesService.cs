@@ -82,10 +82,24 @@ namespace Server.Services
 
         public PrivateSeries SearchAndAddToPrivateSeries(string user, string code)
         {
-            var series = (PrivateSeries)_memoryCache.Get(_privateCode[code]);
-            series.AddUser(user);
-            _iLogger.LogInformation($"Add to private series:{series.Id} with user:{user}");
-            return series;
+            if (_privateCode.ContainsKey(code))
+            {
+                var series = (PrivateSeries)_memoryCache.Get(_privateCode[code]);
+                if (!series.IsFull)
+                {
+                    series.AddUser(user);
+                    _iLogger.LogInformation($"Add to private series:{series.Id} with user:{user}");
+                    return series;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public TrainingSeries AddToTrainingSeries(string user)
