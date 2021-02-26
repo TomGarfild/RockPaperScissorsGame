@@ -123,7 +123,14 @@ namespace Client.Menu
                 await Task.Delay(1000);
             }
 
-            var seriesJson = await (await seriesTask).Content.ReadAsStringAsync();
+            var responce = await seriesTask;
+            if ((int) responce.StatusCode == 404)
+            {
+                Console.WriteLine("\nRoom is full or not found");
+                await Task.Delay(2000);
+                return true;
+            }
+            var seriesJson = await (responce).Content.ReadAsStringAsync();
             var seriesId = JsonSerializer.Deserialize<Series>(seriesJson, new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
