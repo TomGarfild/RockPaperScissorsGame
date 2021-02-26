@@ -78,12 +78,10 @@ namespace Server.Services
                     }
                 }
             });
-            dic1.OrderBy(d=>d.Value).Select(l =>
+            dic1.OrderByDescending(d=>d.Value).ToList().ForEach(l =>
             {
-
                 str.Append($"\t{l.Key}\t");
                 str.AppendLine(l.Value.ToString());
-                return "";
             });
             return str.ToString();
         }

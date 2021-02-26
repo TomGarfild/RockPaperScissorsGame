@@ -82,6 +82,8 @@ namespace Server.Controllers
                 var series =
                     _seriesService.SearchAndAddToPrivateSeries(user, code);
 
+                if (series == null)
+                    return StatusCode(404);
                 while ((!series.IsDeleted)
                        && (!series.IsFull))
                 {
