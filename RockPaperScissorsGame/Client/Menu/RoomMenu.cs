@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Serilog;
 using Server.Models;
 
 namespace Client.Menu
@@ -9,13 +10,11 @@ namespace Client.Menu
     public class RoomMenu : Menu
     {
         private readonly HttpClient _httpClient;
-        private readonly string _token;
         private string _seriesRoute;
         private string _gameRoute;
-        public RoomMenu(HttpClient httpClient, string token)
+        public RoomMenu(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _token = token;
         }
         public override async Task Start()
         {
@@ -115,6 +114,7 @@ namespace Client.Menu
                     }
                 }
                 Console.WriteLine("\nYour opponent was found.");
+                await Task.Delay(1000);
             }
 
             var seriesJson = await (await seriesTask).Content.ReadAsStringAsync();
@@ -146,9 +146,11 @@ namespace Client.Menu
                 switch (key)
                 {
                     case ConsoleKey.D1:
-                        var privateJson = await (await _httpClient.GetAsync(_httpClient.BaseAddress.AbsoluteUri
-                                                                            + "/series/NewPrivateSeries"))
-                                                    .Content.ReadAsStringAsync();
+                        Log.Information($"Get request {_httpClient.BaseAddress.AbsoluteUri + "/series/NewPrivateSeries"}");
+                        var response = await _httpClient.GetAsync(_httpClient.BaseAddress.AbsoluteUri
+                                                                  + "/series/NewPrivateSeries");
+                        Log.Information($"Status code: {response.StatusCode}");
+                        var privateJson = await response.Content.ReadAsStringAsync();
                         var code = JsonSerializer.Deserialize<PrivateSeries>(privateJson, new JsonSerializerOptions()
                         {
                             PropertyNameCaseInsensitive = true

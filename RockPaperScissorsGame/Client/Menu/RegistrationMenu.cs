@@ -34,9 +34,12 @@ namespace Client.Menu
                     case ConsoleKey.R:
                         var regContent = GetContent();
                         var regUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/account/register");
+                        Log.Information($"Post request: {regUri}");
                         var regResponse = await _httpClient.PostAsync(regUri, regContent);
+                        Log.Information($"Status code: {regResponse.StatusCode}");
                         if ((int) regResponse.StatusCode == 200)
                         {
+                            
                             Console.WriteLine("Now you can login");
                         }
                         else
@@ -47,7 +50,9 @@ namespace Client.Menu
                     case ConsoleKey.L:
                         var loginContent = GetContent();
                         var loginUri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "/account/login");
+                        Log.Information($"Post request: {loginUri}");
                         var loginResponse = await _httpClient.PostAsync(loginUri, loginContent);
+                        Log.Information($"Status code: {loginResponse.StatusCode}");
                         if (loginResponse.IsSuccessStatusCode)
                         {
                             loginResponse.EnsureSuccessStatusCode();

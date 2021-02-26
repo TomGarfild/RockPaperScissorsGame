@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace Client.Menu
 {
@@ -18,9 +19,9 @@ namespace Client.Menu
         }
         public override async Task Start()
         {
-            bool changed = true;
+            var changed = true;
             
-            var roomMenu = new RoomMenu(_httpClient, _token);
+            var roomMenu = new RoomMenu(_httpClient);
 
             if (!_httpClient.DefaultRequestHeaders.Contains("x-token"))
             {
@@ -67,6 +68,7 @@ namespace Client.Menu
                         await statistic.Start();
                         break;
                     case ConsoleKey.E:
+                        Log.Information($"Delete request: {_httpClient.BaseAddress.AbsoluteUri + "/account/logout/" + _token}");
                         await _httpClient.DeleteAsync(new Uri(_httpClient.BaseAddress.AbsoluteUri + "/account/logout/" +
                                                               _token));
                         return;
