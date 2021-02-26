@@ -25,12 +25,22 @@ namespace Server.Services
                 series.SetChoice2(choice);
             }
 
-            return series.ReturnToken();
+            if (!series.IsRoundDone())
+            {
+                return series.ReturnToken();
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public Round.Result GetResult(string user, string seriesKey)
         {
-            return _seriesService.GetSeries(seriesKey).GetResult(user);
+            if (_seriesService.SeriesIs(seriesKey))
+                return _seriesService.GetSeries(seriesKey).GetResult(user);
+            else
+                return Round.Result.Undefine;
         }
         public void StartRoundTraining(string user, string seriesKey, string choice)
         {

@@ -37,6 +37,10 @@ namespace Server.Models
             }
         }
 
+        public bool IsRoundDone()
+        {
+            return _round.IsDone();
+        }
         public virtual Round.Result GetResult(string user)
         {
             var res = _round.GetResult();
