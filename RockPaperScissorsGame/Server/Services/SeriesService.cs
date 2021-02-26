@@ -75,6 +75,7 @@ namespace Server.Services
             var series = PrivateSeries.GetNewPrivateSeries();
             _memoryCache.Set(series.Id, series, options);
             _privateCode.TryAdd(series.Code, series.Id);
+            _iLogger.LogInformation($"Create private series:{series.Id}");
             return series;
 
         }
@@ -83,6 +84,7 @@ namespace Server.Services
         {
             var series = (PrivateSeries)_memoryCache.Get(_privateCode[code]);
             series.AddUser(user);
+            _iLogger.LogInformation($"Add to private series:{series.Id} with user:{user}");
             return series;
         }
 
@@ -90,6 +92,7 @@ namespace Server.Services
         {
             var series = new TrainingSeries(user);
             _memoryCache.Set(series.Id, series, options);
+            _iLogger.LogInformation($"Create traning series:{series.Id} with user:{user}");
             return series;
         }
 
@@ -97,11 +100,13 @@ namespace Server.Services
         {
             if (_waitSeries.Id == series)
             {
+                _waitSeries.IsDeleted = true;
                 _waitSeries.CancelRound();
                 _waitSeries = null;
             }
             if(SeriesIs(series))
                 _memoryCache.Remove(series);
+            _iLogger.LogInformation($"Cancel series:{series}");
         }
     }
 }
