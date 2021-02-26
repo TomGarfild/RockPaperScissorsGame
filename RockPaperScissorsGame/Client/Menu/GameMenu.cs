@@ -55,7 +55,7 @@ namespace Client.Menu
                         await roomMenu.Start();
                         break;
                     case ConsoleKey.D2:
-                        roomMenu.SetRoutes("/series/NewPrivateSeries", "/round/Play");
+                        roomMenu.SetRoutes("/series/SearchPrivateSeries", "/round/Play");
                         await roomMenu.Start();
                         break;
                     case ConsoleKey.D3:

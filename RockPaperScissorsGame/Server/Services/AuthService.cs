@@ -40,7 +40,7 @@ namespace Server.Services
         {
             var account = await _accounts.FindAsync(login, password);
             if (account == null) return null;
-            if (_tokens.ContainsValue(login)) throw new MultiDeviceException("You cannot login in several devices at the same time.");
+            if (_tokens.ContainsValue((await _accounts.FindAsync(login, password)).Id)) throw new MultiDeviceException("You cannot login in several devices at the same time.");
 
             var token = Guid.NewGuid().ToString();
             _tokens.Add(token, account.Id);
