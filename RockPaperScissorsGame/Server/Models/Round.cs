@@ -89,5 +89,10 @@ namespace Server.Models
         {
             _user2Choice =(OptionChoice) new Random().Next(3) + 1;
         }
+
+        public void Cancel()
+        {
+            Source.Cancel();
+        }
     }
 }
