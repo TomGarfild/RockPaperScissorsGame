@@ -107,5 +107,10 @@ namespace Server.Models
         {
             return _round.Source.Token;
         }
+
+        public void CancelRound()
+        {
+            _round.Cancel();
+        }
     }
 }

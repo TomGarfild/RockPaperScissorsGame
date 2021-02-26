@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Server.Models;
 using Server.Options;
@@ -11,14 +12,16 @@ namespace Server.Services
         private readonly ConcurrentDictionary<string, string> _privateCode = new ConcurrentDictionary<string, string>();
         private readonly IMemoryCache _memoryCache;
         private readonly IOptions<TimeOptions> _timeOptions;
+        private readonly ILogger<SeriesService> _iLogger;
         private Series _waitSeries = null;
         private MemoryCacheEntryOptions options = null;
         private static readonly object Ob = new object();
 
-        public SeriesService(IMemoryCache memoryCache, IOptions<TimeOptions> timeOptions)
+        public SeriesService(IMemoryCache memoryCache, IOptions<TimeOptions> timeOptions,ILogger<SeriesService> iLogger)
         {
             _memoryCache = memoryCache;
             _timeOptions = timeOptions;
+            _iLogger = iLogger;
             options = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(_timeOptions.Value.SeriesTimeOut)
                 .RegisterPostEvictionCallback((key, value, reason, substate) =>
@@ -47,6 +50,7 @@ namespace Server.Services
                     _waitSeries.AddUser(user);
                     var room = _waitSeries;
                     _waitSeries = null;
+                    _iLogger.LogInformation($"Add to series:{room.Id} with user:{user}");
                     return room;
                 }
                 else
@@ -54,6 +58,7 @@ namespace Server.Services
                     var room = new Series(user);
                     _memoryCache.Set(room.Id, room, options);
                     _waitSeries = room;
+                    _iLogger.LogInformation($"Create series:{room.Id} with user:{user}");
                     return room;
                 }
             }
@@ -91,7 +96,10 @@ namespace Server.Services
         public void CancelSeries(string series)
         {
             if (_waitSeries.Id == series)
+            {
+                _waitSeries.CancelRound();
                 _waitSeries = null;
+            }
             if(SeriesIs(series))
                 _memoryCache.Remove(series);
         }
