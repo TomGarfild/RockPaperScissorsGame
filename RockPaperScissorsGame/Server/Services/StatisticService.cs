@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Server.Model;
-using Server.StatisticStorege;
+using Server.Models;
+using Server.StatisticStorage;
 
-namespace Server.Service
+namespace Server.Services
 {
     public class StatisticService:IStatisticService
     {

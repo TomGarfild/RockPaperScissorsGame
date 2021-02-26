@@ -6,9 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Xunit;
 using Moq;
-using Server.Model;
 using Server.Options;
-using Server.Service;
+using Server.Services;
 
 namespace XUnitTests
 {

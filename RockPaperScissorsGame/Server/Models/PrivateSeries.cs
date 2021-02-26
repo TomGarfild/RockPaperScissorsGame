@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Server.Model
+namespace Server.Models
 {
     public class PrivateSeries :Series
     {

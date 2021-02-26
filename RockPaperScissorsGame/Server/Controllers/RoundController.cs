@@ -5,9 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Server.Model;
+using Server.Models;
 using Server.Options;
-using Server.Service;
 using Server.Services;
 
 namespace Server.Controllers
