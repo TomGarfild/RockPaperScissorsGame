@@ -30,7 +30,7 @@ namespace Server.Services
 
             var str = new StringBuilder($"Login: {list[0].Login}\n");
             var time = new TimeSpan();
-            list.Select(l => time.Add(l.Length));
+            list.ForEach(l => time = time.Add(l.Length));
             str.AppendLine($"Total time: {time.ToString()}");
             str.AppendLine($"Total Game: {list.Count}");
             var win = list.Count(l => l.Result == Round.Result.Win);
@@ -57,7 +57,7 @@ namespace Server.Services
                     dic.TryAdd(l.Login, 1);
                 }
             });
-            var dicSort =dic.Where(d => d.Value >= 10);
+            var dicSort = dic.Where(d => d.Value >= 10);
             var str = new StringBuilder("");
             str.AppendLine($"\tLogin\tWin");
             var dic1 = new Dictionary<string, int>();
