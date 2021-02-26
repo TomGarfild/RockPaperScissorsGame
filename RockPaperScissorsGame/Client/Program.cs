@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Client.Menu;
+using Serilog;
 
 namespace Client
 {
@@ -11,9 +12,13 @@ namespace Client
     {
         public static async Task Main()
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File("client.log")
+                .CreateLogger();
             var httpClient = await GetHttpClient("settings.json");
             var menu = new RegistrationMenu(httpClient);
             await menu.Start();
+
         }
         private static async Task<HttpClient> GetHttpClient(string path)
         {
