@@ -8,5 +8,10 @@
     "id": "5b5756ed-72c3-4d52-8b55-8a119b30f2a8",
     "login": "tom1",
     "password": "qwerty"
+  },
+  {
+    "id": "f3128b11-c4df-4d05-aead-514bdb650a0b",
+    "login": "tom33",
+    "password": "qwerty"
   }
 ]
