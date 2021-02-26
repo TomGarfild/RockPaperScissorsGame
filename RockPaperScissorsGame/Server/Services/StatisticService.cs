@@ -64,7 +64,7 @@ namespace Server.Services
             var str = new StringBuilder("");
             str.AppendLine($"\tLogin\tWin");
             var dic1 = new Dictionary<string, int>();
-            _statisticContext.StatisticItems.ToList().ForEach(l =>
+            _statisticContext.StatisticItems.Where(s=>s.Result== Round.Result.Win).ToList().ForEach(l =>
             {
                 if (dicSort.Any(d=>d.Key==l.Login))
                 {
