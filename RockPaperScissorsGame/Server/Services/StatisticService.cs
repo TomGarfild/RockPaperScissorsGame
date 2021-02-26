@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Server.Models;
+using Server.StatisticStorage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Server.Models;
-using Server.StatisticStorage;
 
 namespace Server.Services
 {
@@ -78,12 +77,11 @@ namespace Server.Services
                     }
                 }
             });
-            dic1.OrderBy(d=>d.Value).Select(l =>
+            dic1.OrderByDescending(d=>d.Value).ToList().ForEach(l =>
             {
 
                 str.Append($"\t{l.Key}\t");
                 str.AppendLine(l.Value.ToString());
-                return "";
             });
             return str.ToString();
         }
