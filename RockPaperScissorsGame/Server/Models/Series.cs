@@ -52,7 +52,8 @@ namespace Server.Models
                 }
                 else
                 {
-                    _round.Clear();
+                    Clear();
+                    _checkResult = false;
                 }
                 return res;
             }
@@ -64,7 +65,8 @@ namespace Server.Models
                 }
                 else
                 {
-                   _round.Clear();
+                   Clear();
+                   _checkResult = false;
                 }
 
                 res = res switch
@@ -81,9 +83,15 @@ namespace Server.Models
             }
             else
             {
-                _round.Clear();
+                Clear();
+                _checkResult = false;
             }
             return Round.Result.Undefine;
+        }
+
+        public void Clear()
+        {
+            _round = new Round();
         }
 
         public void SetChoice1(string choice)

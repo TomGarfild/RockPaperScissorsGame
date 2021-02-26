@@ -70,12 +70,6 @@ namespace Server.Models
                 Source.Cancel();
             }
         }
-        public void Clear()
-        {
-            _user1Choice = Round.OptionChoice.Undefine;
-            _user2Choice = Round.OptionChoice.Undefine;
-            Source = new CancellationTokenSource() ;
-        }
         public static OptionChoice ParseChoice(string choice)
         {
             switch (choice)
