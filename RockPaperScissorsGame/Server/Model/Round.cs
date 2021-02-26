@@ -36,7 +36,11 @@ namespace Server.Model
             {
                 return Result.Win;
             }
-            else if (_user1Choice > _user2Choice)
+            else if (_user1Choice == OptionChoice.Paper && _user2Choice == OptionChoice.Rock)
+            {
+                return Result.Win;
+            }
+            else if (_user1Choice == OptionChoice.Scissor && _user2Choice == OptionChoice.Paper)
             {
                 return Result.Win;
             }
@@ -47,14 +51,21 @@ namespace Server.Model
         public void SetChoice1(string choice)
         {
             _user1Choice = ParseChoice(choice);
+            if (_user1Choice != OptionChoice.Undefine && _user2Choice != OptionChoice.Undefine)
+            {
+                Source.Cancel();
+            }
         }
         public void SetChoice2(string choice)
         {
             _user2Choice = ParseChoice(choice);
+            if (_user1Choice != OptionChoice.Undefine && _user2Choice != OptionChoice.Undefine)
+            {
+                Source.Cancel();
+            }
         }
         public void Clear()
         {
-            Source.Cancel();
             _user1Choice = Round.OptionChoice.Undefine;
             _user2Choice = Round.OptionChoice.Undefine;
             Source = new CancellationTokenSource() ;

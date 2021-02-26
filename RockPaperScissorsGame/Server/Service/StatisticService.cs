@@ -33,7 +33,7 @@ namespace Server.Service
 
             var str = new StringBuilder($"Login: {list[0].Login}\n");
             var time = new TimeSpan();
-            list.Select(l => time += l.Length);
+            list.Select(l => time.Add(l.Length));
             str.AppendLine($"Total time: {time}");
             str.AppendLine($"Total Game: {list.Count}");
             var win = list.Count(l => l.Result == Round.Result.Win);
