@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace Client.Menu
 {
@@ -28,12 +29,18 @@ namespace Client.Menu
                 switch (key)
                 {
                     case ConsoleKey.D1:
+                        Log.Information($"Get request: {_httpClient.BaseAddress.AbsoluteUri + "/statistic/LocalStatistic"}");
                         var response = await _httpClient.GetAsync(_httpClient.BaseAddress.AbsoluteUri + "/statistic/LocalStatistic");
+                        Log.Information($"Status cod: {response.StatusCode}");
                         var stat = await response.Content.ReadAsAsync<string>();
+                        
                         Console.WriteLine("\n"+stat);
                         break;
                     case ConsoleKey.D2:
+                        Log.Information($"Get request: {_httpClient.BaseAddress.AbsoluteUri + "/statistic/GlobalStatistic"}");
                         var responseGlobal = await _httpClient.GetAsync(_httpClient.BaseAddress.AbsoluteUri + "/statistic/GlobalStatistic");
+                        Log.Information($"Status cod: {responseGlobal.StatusCode}");
+
                         var statGlobal = await responseGlobal.Content.ReadAsAsync<string>();
                         Console.WriteLine("\n"+statGlobal);
                         break;
