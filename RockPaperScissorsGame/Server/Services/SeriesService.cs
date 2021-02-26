@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Security.Policy;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using Server.Model;
+using Server.Models;
 using Server.Options;
 
-namespace Server.Service
+namespace Server.Services
 {
     public class SeriesService : ISeriesService
     {

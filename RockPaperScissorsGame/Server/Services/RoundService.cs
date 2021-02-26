@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Server.Model;
+﻿using System.Threading;
+using Server.Models;
 
-namespace Server.Service
+namespace Server.Services
 {
     public class RoundService:IRoundService
     {

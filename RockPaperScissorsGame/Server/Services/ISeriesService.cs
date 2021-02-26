@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Server.Controllers;
-using Server.Model;
+﻿using Server.Models;
 
-namespace Server.Service
+namespace Server.Services
 {
     public interface ISeriesService
     {

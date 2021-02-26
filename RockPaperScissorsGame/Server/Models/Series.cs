@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Server.Model
+namespace Server.Models
 {
     public class Series
     {

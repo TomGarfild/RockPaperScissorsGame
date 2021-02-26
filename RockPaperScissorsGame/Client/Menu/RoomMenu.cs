@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Net.Http;
-using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
-using Server.Model;
+using Server.Models;
 
 namespace Client.Menu
 {
