@@ -62,7 +62,7 @@ namespace Server.Services
 
         public string FindById(string id)
         {
-            return _storage.Find(a => a.Id == id).Login;
+            return _storage.Find(a => a.Id == id)?.Login;
         }
     }
 }

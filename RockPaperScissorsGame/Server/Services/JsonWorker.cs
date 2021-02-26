@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace Server.Services
 {
@@ -35,7 +36,7 @@ namespace Server.Services
             }
             catch (Exception e)
             {
-                //_logger.LogError(e, "Error occurred during writing to file");
+                Log.Error($"Exception during writing to json file {e}");
             }
             finally
             {
@@ -58,7 +59,7 @@ namespace Server.Services
             }
             catch (Exception e)
             {
-                //_logger.LogError(e, "Error occurred during reading from file");
+                Log.Error($"Exception during reading from json file {e}");
             }
             finally
             {

@@ -17,10 +17,14 @@ namespace Client
                 .CreateLogger();
             var httpClient = await GetHttpClient("settings.json");
             var menu = new RegistrationMenu(httpClient);
-            await menu.Start();
-            /*
-             * System.Net.Http.HttpRequestException: 'No connection could be made because the target machine actively refused it.'
-             */
+            try
+            {
+                await menu.Start();
+            }
+            catch (HttpRequestException e)
+            {
+                Log.Error($"Exception client: {e}");
+            }
         }
         private static async Task<HttpClient> GetHttpClient(string path)
         {
