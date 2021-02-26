@@ -64,7 +64,8 @@ namespace Server.Controllers
 
                 var result = _roundService.GetResult(user, series);
                 stopwatch.Stop();
-                statisticService.Add(user, stopwatch.Elapsed, DateTimeOffset.Now, result, Round.ParseChoice(choice));
+                if(result!=Round.Result.Undefine) 
+                    statisticService.Add(user, stopwatch.Elapsed, DateTimeOffset.Now, result, Round.ParseChoice(choice));
                 return result.ToString();
             }
             else

@@ -45,10 +45,19 @@ namespace Server.Models
             return Result.Lose;
         }
 
+        public bool IsDone()
+        {
+            if (_user1Choice != OptionChoice.Undefine && _user2Choice != OptionChoice.Undefine)
+            {
+                return true;
+            }
+
+            return false;
+        }
         public void SetChoice1(string choice)
         {
             _user1Choice = ParseChoice(choice);
-            if (_user1Choice != OptionChoice.Undefine && _user2Choice != OptionChoice.Undefine)
+            if (IsDone())
             {
                 Source.Cancel();
             }
@@ -56,7 +65,7 @@ namespace Server.Models
         public void SetChoice2(string choice)
         {
             _user2Choice = ParseChoice(choice);
-            if (_user1Choice != OptionChoice.Undefine && _user2Choice != OptionChoice.Undefine)
+            if (IsDone())
             {
                 Source.Cancel();
             }
